@@ -1,0 +1,97 @@
+<%- include("./partials/header", {title: recipe.title }); %>
+<div class="wrapper">
+    <div class="card">
+        <div class="image">
+            <img
+                src="assets/images/image-omelette.jpeg"
+                alt="<%= recipe.title %>"
+            />
+        </div>
+        <div class="recipe">
+            <div class="title">
+                <h1><%= recipe.title %></h1>
+            </div>
+            <div class="recipeDescription">
+                <p><%= recipe.description %></p>
+            </div>
+            <div class="prepTime">
+                <h3>Preparation time</h3>
+                <ul class="timeList">
+                    <li>
+                        <p>
+                            <span>Total:</span> Approximately <%= recipe.totalTime %> minutes
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            <span>Preparation:</span> <%= recipe.prepTime %>
+                            minutes
+                        </p>
+                    </li>
+                    <li>
+                        <p>
+                            <span>Cooking:</span> <%= recipe.cookingTime %>
+                            minutes
+                        </p>
+                    </li>
+                </ul>
+            </div>
+            <div class="ingredients">
+                <h3>Ingredients</h3>
+                <ul class="ingredientList">
+                    <% recipe.ingredients.forEach(ingredient => { %>
+                    <li><span><%= ingredient %></span></li>
+                    <% }) %>
+                </ul>
+            </div>
+            <div class="line"></div>
+            <div class="instructions">
+                <h3>Instructions</h3>
+                <ul class="instructionList">
+                    <% recipe.instructions.forEach(instruction => { %>
+                    <li>
+                        <span><%= instruction %></span>
+                    </li>
+                    <% }) %>
+                </ul>
+            </div>
+            <div class="line"></div>
+            <div class="nutrition">
+                <h3>Nutrition</h3>
+                <p>
+                    The table below shows nutritional values per serving without
+                    the additional fillings.
+                </p>
+                <div class="values">
+                    <p class="text">Calories</p>
+                    <p class="num"><%= recipe.calories %> kcal</p>
+                </div>
+                <div class="line"></div>
+
+                <div class="values">
+                    <p class="text">Carbs</p>
+                    <p class="num"><%= recipe.carbs %> g</p>
+                </div>
+                <div class="line"></div>
+
+                <div class="values">
+                    <p class="text">Protein</p>
+                    <p class="num"><%= recipe.protein %> g</p>
+                </div>
+                <div class="line"></div>
+
+                <div class="values">
+                    <p class="text">Fat</p>
+                    <p class="num" id="num"><%= recipe.fat %> g</p>
+                </div>
+            </div>
+            <a href="/recipes">Back to Recipes</a>
+            <% if ((user._id.toString() == recipe.user._id.toString()) ||
+            user.role == "admin") { %>
+            <a href="/recipes/<%= recipe._id %>/deleteRecipe" class="deleteBtn">Delete Recipe</a>
+            <a href="/recipes/<%= recipe._id %>/getUpdateRecipe" class="deleteBtn">Update Recipe</a>
+            <% } %>
+        </div>
+    </div>
+</div>
+<%- include("./partials/footer") %>

@@ -1,0 +1,74 @@
+<%- include("./partials/header", {title: "Create Recipe"}) %>
+<div class="form">
+    <form action="/recipes/<%= recipe._id %>" method="post">
+        <h2>Update Recipe</h2>
+        <input
+            type="text"
+            name="title"
+            placeholder="title"
+            value="<%=recipe.title%>"
+        />
+        <textarea
+            type="text"
+            name="description"
+            placeholder="description"
+            minlength="10"
+            maxlength="200"
+            class="description"
+        >
+<%= recipe.description %></textarea>
+        <input type="text" name="totalTime" placeholder="total time" value="<%= recipe.totalTime %>" />
+        <input type="text" name="prepTime" placeholder="preparation time" value="<%= recipe.prepTime %>" />
+        <input type="text" name="cookingTime" placeholder="cooking time" value="<%= recipe.cookingTime %>" />
+        <div class="ingredientList">
+            <% recipe.ingredients.forEach(ingredient => {%>
+                <div class="ingredientDiv">
+                    <input type="text" name="ingredients" class="ingredients" value="<%= ingredient %>" />
+                </div>
+            <% }) %>
+        </div>
+        <button type="button" id="addIngredientsBtn" class="addIngredient">
+            + Ingredient
+        </button>
+        <div class="instructionList">
+            <% recipe.instructions.forEach(instruction => { %>
+                <div class="instructionDiv">
+                    <input type="text" name="instructions" class="ingredients" value="<%= instruction %>" />
+                </div>
+            <% }) %>
+        </div>
+        <button type="button" id="addInstructionsBtn" class="addInstruction">
+            + Instruction
+        </button>
+        <input type="text" name="calories" placeholder="calories" value="<%= recipe.calories %>"/>
+        <input type="text" name="carbs" placeholder="carbs" value="<%= recipe.carbs %>" />
+        <input type="text" name="protein" placeholder="protein" value="<%= recipe.protein %>" />
+        <input type="text" name="fat" placeholder="fat" value="<%= recipe.fat %>" />
+        <button type="submit" class="createRecipe">Update Recipe</button>
+    </form>
+</div>
+<a href="/recipes">Back to Recipes</a>
+<script>
+    let addIngredientsBtn = document.getElementById("addIngredientsBtn");
+    let addInstructionsBtn = document.getElementById("addInstructionsBtn");
+    let instructionList = document.querySelector(".instructionList");
+    let ingredientList = document.querySelector(".ingredientList");
+    let ingredientDiv = document.querySelectorAll(".ingredientDiv")[0];
+    let instructionDiv = document.querySelectorAll(".instructionDiv")[0];
+
+    addIngredientsBtn.addEventListener("click", function () {
+        let newIngredients = ingredientDiv.cloneNode(true);
+        let input = newIngredients.getElementsByTagName("input")[0];
+        input.value = "";
+        ingredientList.appendChild(newIngredients);
+    });
+
+    addInstructionsBtn.addEventListener("click", function () {
+        let newInstructions = instructionDiv.cloneNode(true);
+        let input = newInstructions.getElementsByTagName("input")[0];
+        input.value = "";
+        instructionList.appendChild(newInstructions);
+    });
+</script>
+
+<%- include("./partials/footer") %>

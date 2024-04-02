@@ -1,0 +1,18 @@
+<%- include("./partials/header", {title: `${user.username}'s recipes`}); %>
+<h2><%= user.username %>'s Recipes</h2>
+<div class="recipes">
+    <% recipes.forEach(recipe => { %>
+    <div class="recipeCard">
+        <h3><%= recipe.title %></h3>
+        <% if (recipe.description.length > 100) { %>
+        <p><%= recipe.description.substring(0, 100) %>...</p>
+        <% } else { %>
+        <p><%= recipe.description %></p>
+        <% } %>
+        <span>@ <%= user.username %></span>
+        <a href="/recipes/<%= recipe._id %>" class="viewBtn">View</a>
+    </div>
+    <% }) %>
+</div>
+<a href="/recipes">Back To Recipes</a>
+<%- include("./partials/footer") %>

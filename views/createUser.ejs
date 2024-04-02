@@ -1,0 +1,15 @@
+<%- include("./partials/header", {title: "Create User"}) %>
+<div class="form">
+    <form action="/users/createUser" method="post">
+        <h2>Create User</h2>
+        <input type="text" name="username" placeholder="username" />
+        <input type="email" name="email" placeholder="email" />
+        <input type="password" name="password" placeholder="password" />
+        <select name="role">
+            <option value="user" selected>User</option>
+            <option value="admin">Admin</option>
+        </select>
+        <button type="submit" class="createUser">Create User</button>
+    </form>
+</div>
+<%- include("./partials/footer") %>

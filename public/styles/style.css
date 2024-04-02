@@ -1,0 +1,499 @@
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&family=Young+Serif&display=swap");
+
+* {
+    margin: 0;
+    padding: 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.wrapper {
+    min-height: 100dvh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: hsl(30, 54%, 90%);
+}
+
+.card {
+    height: auto;
+    width: 700px;
+    border: none;
+    margin: 100px 0px 100px 0px;
+    border-radius: 20px;
+    background-color: hsl(0, 0%, 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.image {
+    display: flex;
+    height: auto;
+    width: auto;
+    justify-content: center;
+    align-items: center;
+    margin: 35px 35px 0px 35px;
+}
+
+.image > img {
+    border: none;
+    border-radius: 10px;
+    width: 100%;
+    height: auto;
+}
+
+.recipe {
+    margin: 0px 35px 35px 35px;
+}
+
+.title {
+    font-family: "Young Serif", serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 18px;
+    letter-spacing: 1px;
+    color: hsl(24, 5%, 18%);
+    margin-top: 30px;
+}
+
+.recipeDescription {
+    font-family: "Outfit", sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    color: hsl(30, 10%, 34%);
+    margin-top: 20px;
+}
+
+.prepTime {
+    background-color: hsl(330, 100%, 98%);
+    margin-top: 30px;
+    margin-bottom: 30px;
+    border: none;
+    border-radius: 10px;
+}
+
+.prepTime > h3 {
+    padding: 30px 30px 0px 30px;
+    font-family: "Outfit", sans-serif;
+    font-weight: 600;
+    font-size: 22px;
+    color: hsl(332, 51%, 32%);
+}
+
+.timeList {
+    list-style: disc;
+    list-style-position: outside;
+    color: hsl(332, 51%, 32%);
+    padding-top: 10px;
+    padding-left: 50px;
+    padding-bottom: 30px;
+}
+
+.timeList > li {
+    margin-top: 10px;
+}
+
+.timeList > li > p > span {
+    font-family: "Outfit", sans-serif;
+    font-weight: 700;
+    color: hsl(30, 10%, 34%);
+}
+
+.timeList > li > p {
+    font-family: "Outfit", sans-serif;
+    font-weight: 400;
+    color: hsl(30, 10%, 34%);
+}
+
+.ingredientList {
+    margin-top: 20px;
+    list-style: disc;
+    list-style-position: inside;
+    color: hsl(14, 45%, 36%);
+}
+
+.ingredientList > li > span {
+    font-family: "Outfit", sans-serif;
+    font-weight: 400;
+    color: hsl(30, 10%, 34%);
+}
+
+.ingredientList > li {
+    margin-bottom: 10px;
+}
+
+.ingredients > h3 {
+    font-family: "Young Serif", serif;
+    font-size: 28px;
+    font-weight: 400;
+    color: hsl(14, 45%, 36%);
+}
+
+.ingredients {
+    margin-bottom: 30px;
+}
+
+.line {
+    border: solid hsl(30, 18%, 87%);
+    border-width: 0.1mm;
+}
+
+.instructionList {
+    list-style: decimal;
+    list-style-position: outside;
+    margin-top: 20px;
+    padding-left: 20px;
+}
+
+.instructions > h3 {
+    font-family: "Young Serif", serif;
+    font-size: 28px;
+    font-weight: 400;
+    color: hsl(14, 45%, 36%);
+}
+
+.instructions {
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.instructionList > li {
+    font-family: "Outfit", sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: hsl(14, 45%, 36%);
+    margin-bottom: 12px;
+    margin-left: 20px;
+}
+
+.instructionList > li > span > span {
+    color: hsl(30, 10%, 34%);
+    font-weight: 700;
+}
+
+.instructionList > li > span {
+    font-weight: 400;
+    color: hsl(30, 10%, 34%);
+}
+
+.nutrition {
+    margin-bottom: 20px;
+}
+
+.nutrition > h3 {
+    font-family: "Young Serif", serif;
+    font-size: 28px;
+    font-weight: 400;
+    color: hsl(14, 45%, 36%);
+    margin-top: 30px;
+}
+
+.nutrition > p {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-family: "Outfit", sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    color: hsl(30, 10%, 34%);
+}
+
+.values {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 20px;
+}
+
+.text {
+    font-family: "Outfit", sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    color: hsl(30, 10%, 34%);
+}
+
+.num {
+    font-family: "Outfit", sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: hsl(14, 45%, 36%);
+    text-align: left;
+}
+
+.form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100dvh;
+    margin: 40px;
+    /* overflow: hidden; */
+    /* width: 100%; */
+}
+
+.form > form {
+    background-color: hsl(330, 100%, 98%);
+    border: solid 1px hsl(14, 45%, 36%);
+    border-radius: 15px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+    height: auto;
+    width: 600px;
+}
+
+h2 {
+    font-family: "Young Serif", serif;
+    font-size: 45px;
+    font-weight: 600;
+    color: hsl(14, 45%, 36%);
+    margin: 40px 0px 40px 0px;
+    letter-spacing: 2px;
+}
+
+.form > form > input {
+    font-family: "Outfit", sans-serif;
+    border: 1px solid hsl(14, 45%, 36%);
+    border-radius: 10px;
+    padding: 15px;
+    width: 400px;
+    margin-bottom: 20px;
+}
+
+.loginBtn {
+    margin-bottom: 40px;
+}
+
+.description {
+    font-family: "Outfit", sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    border: 1px solid hsl(14, 45%, 36%);
+    border-radius: 10px;
+    padding: 10px;
+    width: 400px;
+    margin-bottom: 20px;
+}
+
+.ingredientList {
+    width: auto;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: minmax(10px, auto);
+    gap: 10px;
+}
+
+.ingredientList > .ingredientDiv > input {
+    font-family: "Outfit", sans-serif;
+    border: 1px solid hsl(14, 45%, 36%);
+    border-radius: 10px;
+    padding: 10px;
+    width: auto;
+    margin-bottom: 20px;
+}
+
+.instructionList {
+    padding-left: 0px;
+}
+
+.instructionList > .instructionDiv > input {
+    font-family: "Outfit", sans-serif;
+    border: 1px solid hsl(14, 45%, 36%);
+    border-radius: 10px;
+    padding: 10px;
+    width: 400px;
+    margin-bottom: 20px;
+}
+
+.ingredients,
+.instructions {
+    font-family: "Outfit", sans-serif;
+    font-weight: 400;
+    color: hsl(30, 10%, 34%);
+}
+
+.form > form > button {
+    cursor: pointer;
+    font-family: "Outfit", sans-serif;
+    font-size: 16px;
+    border: 1px solid hsl(14, 45%, 36%);
+    border-radius: 10px;
+    padding: 10px;
+    width: 400px;
+    color: hsl(330, 100%, 98%);
+    background-color: hsl(332, 51%, 32%);
+}
+
+.createRecipe {
+    cursor: pointer;
+    font-family: "Outfit", sans-serif;
+    font-size: 16px;
+    border: 1px solid hsl(14, 45%, 36%);
+    border-radius: 10px;
+    padding: 10px;
+    width: 400px;
+    color: hsl(330, 100%, 98%);
+    background-color: hsl(332, 51%, 32%);
+    margin-bottom: 50px;
+}
+
+.addIngredient,
+.addInstruction {
+    cursor: pointer;
+    font-family: "Outfit", sans-serif;
+    font-size: 16px;
+    border: 1px solid hsl(14, 45%, 36%);
+    border-radius: 10px;
+    padding: 10px;
+    width: 400px;
+    color: hsl(330, 100%, 98%);
+    background-color: hsl(332, 51%, 32%);
+    margin-bottom: 15px;
+}
+
+.form > form > a {
+    font-family: "Outfit", sans-serif;
+    margin-top: 20px;
+    font-size: 16px;
+    border: 1px solid hsl(14, 45%, 36%);
+    border-radius: 10px;
+    padding: 10px;
+    text-decoration: none;
+    width: 400px;
+    text-align: center;
+    color: hsl(330, 100%, 98%);
+    background-color: hsl(332, 51%, 32%);
+}
+
+a {
+    font-family: "Outfit", sans-serif;
+    font-size: 16px;
+    border: 1px solid hsl(14, 45%, 36%);
+    border-radius: 8px;
+    padding: 10px;
+    text-decoration: none;
+    text-align: center;
+    color: hsl(330, 100%, 98%);
+    background-color: hsl(332, 51%, 32%);
+}
+
+.recipes {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: minmax(100px, auto);
+}
+
+.recipeCard {
+    height: auto;
+    width: 300px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    flex-direction: column;
+    border: 2px solid hsl(14, 45%, 36%);
+    border-radius: 10px;
+    margin: 40px;
+    /* margin-bottom: 40px; */
+    /* background-color: aquamarine; */
+}
+
+.recipeCard > h3 {
+    font-family: "Young Serif", serif;
+    font-size: 30px;
+    font-weight: 600;
+    color: hsl(332, 51%, 32%);
+    /* padding: 15px; */
+    margin: 15px;
+}
+
+.recipeCard > p {
+    font-family: "Outfit", sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    color: hsl(30, 10%, 34%);
+    margin: 0px 15px 15px 15px;
+}
+
+.recipeCard > span {
+    font-family: "Outfit", sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    color: hsl(30, 10%, 34%);
+    margin: 0px 0px 15px 15px;
+}
+
+.viewBtn {
+    margin-left: 15px;
+    margin-bottom: 20px;
+    margin-top: auto;
+}
+
+.deleteBtn {
+    font-family: "Outfit", sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    margin-left: 10px;
+    background-color: hsl(30, 10%, 34%);
+}
+
+.usernameLink {
+    color: hsl(30, 10%, 34%);
+    font-family: "Outfit", sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    background-color: transparent;
+    border: none;
+    margin-bottom: 10px;
+}
+
+.usernameLink:hover {
+    font-weight: 700;
+    color: hsl(332, 51%, 32%);
+}
+
+select {
+    border: 2px solid hsl(332, 51%, 32%);
+    border-radius: 10px;
+    width: 400px;
+    padding: 14px;
+    color: hsl(30, 10%, 34%);
+    margin-bottom: 20px;
+}
+
+select > option {
+    border: 2px solid hsl(30, 10%, 34%);
+    background-color: hsl(330, 100%, 98%);
+    color: hsl(30, 10%, 34%);
+}
+
+.createUser {
+    margin-bottom: 30px;
+}
+
+@media only screen and (width <= 550px) {
+    .card {
+        margin-top: 0px;
+        margin-bottom: 0px;
+        border: none;
+        border-radius: 0px;
+        width: 100%;
+        height: 100%;
+    }
+
+    .image {
+        margin: 0px;
+        height: auto;
+        width: 100%;
+    }
+
+    .description {
+        width: auto;
+    }
+
+    .recipeDescription {
+        width: auto;
+    }
+}
