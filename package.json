@@ -5,7 +5,9 @@
     "main": "index.js",
     "type": "module",
     "scripts": {
-        "start": "nodemon server.js"
+        "dev": "dotenvx run -f .env.development -- nodemon server.js",
+        "dev:env:encrypt": "dotenvx encrypt -f .env.development",
+        "dev:env:decrypt": "dotenvx decrypt -f .env.development"
     },
     "keywords": [],
     "author": "",
@@ -13,7 +15,6 @@
     "dependencies": {
         "bcryptjs": "^2.4.3",
         "cookie-parser": "^1.4.6",
-        "dotenv": "^16.4.5",
         "ejs": "^3.1.10",
         "express": "^4.19.2",
         "jsonwebtoken": "^9.0.2",
@@ -21,6 +22,7 @@
         "morgan": "^1.10.0"
     },
     "devDependencies": {
+        "@dotenvx/dotenvx": "^1.10.2",
         "nodemon": "^3.1.4"
     }
 }
