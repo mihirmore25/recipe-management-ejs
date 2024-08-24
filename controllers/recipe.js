@@ -112,6 +112,11 @@ export const getRecipe = async (req, res) => {
 
     const user = req.user;
 
+    // const updatedRecipe = await Recipe.findByIdAndUpdate(recipeId, {
+    //     views: { $push: user._id },
+    // });
+    // console.log(updatedRecipe);
+
     return res.status(200).render("recipe", { recipe, user });
 };
 

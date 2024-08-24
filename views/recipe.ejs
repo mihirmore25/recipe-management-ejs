@@ -19,7 +19,8 @@
                 <ul class="timeList">
                     <li>
                         <p>
-                            <span>Total:</span> Approximately <%= recipe.totalTime %> minutes
+                            <span>Total:</span> Approximately <%=
+                            recipe.totalTime %> minutes
                         </p>
                     </li>
                     <li>
@@ -88,8 +89,14 @@
             <a href="/recipes">Back to Recipes</a>
             <% if ((user._id.toString() == recipe.user._id.toString()) ||
             user.role == "admin") { %>
-            <a href="/recipes/<%= recipe._id %>/deleteRecipe" class="deleteBtn">Delete Recipe</a>
-            <a href="/recipes/<%= recipe._id %>/getUpdateRecipe" class="deleteBtn">Update Recipe</a>
+            <a href="/recipes/<%= recipe._id %>/deleteRecipe" class="deleteBtn"
+                >Delete Recipe</a
+            >
+            <a
+                href="/recipes/<%= recipe._id %>/getUpdateRecipe"
+                class="deleteBtn"
+                >Update Recipe</a
+            >
             <% } %>
         </div>
     </div>
