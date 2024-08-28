@@ -1,5 +1,5 @@
-<%- include("./partials/header", {title: `${user.username}'s recipes`}); %>
-<h2><%= user.username %>'s Recipes</h2>
+<%- include("./partials/header", {title: `${username}'s recipes`}); %>
+<h2><%= username %>'s Recipes</h2>
 <div class="recipes">
     <% recipes.forEach(recipe => { %>
     <div class="recipeCard">

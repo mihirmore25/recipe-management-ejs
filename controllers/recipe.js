@@ -268,5 +268,8 @@ export const getUserRecipes = async (req, res) => {
 
     console.log(recipes);
 
-    return res.status(200).render("userRecipes", { recipes, user });
+    const username =
+        user.username[0].toUpperCase() + user.username.substring(1);
+
+    return res.status(200).render("userRecipes", { recipes, username, user });
 };
