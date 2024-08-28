@@ -1,6 +1,8 @@
 <%- include("./partials/header", {title: "Home"}); %>
 <div class="form">
     <form action="/" method="post">
+        <h3 id="errorMsg" style="color: #8b0000; margin-top: 20px;"><%= error_msg %></h3>
+        <h3 id="successMsg" style="color: green; margin-top: 20px;"><%= success_msg %></h3>
         <h2>Register</h2>
         <input placeholder="username" name="username" type="text" />
         <input type="email" name="email" placeholder="email" />
