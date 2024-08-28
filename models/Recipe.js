@@ -4,6 +4,11 @@ const Schema = mongoose.Schema;
 
 const recipeSchema = new Schema(
     {
+        recipeImage: {
+            type: String,
+            required: [true, "Your recipe image is required."],
+            default: null,
+        },
         title: {
             type: String,
             required: [true, "Your title is required"],

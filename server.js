@@ -14,7 +14,7 @@ dbClient();
 
 // Middleware
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(
     session({
@@ -35,6 +35,7 @@ app.set("view engine", "ejs");
 // app.use(express.static(__dirname + "/public"));
 app.use(express.static("public/styles"));
 app.use(express.static("public/js"));
+app.use(express.static("public/temp"));
 
 // Routes
 app.use("/", authRoutes);

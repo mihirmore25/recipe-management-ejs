@@ -11,12 +11,13 @@ import {
     updateRecipe,
 } from "../controllers/recipe.js";
 import { isAdmin } from "../middleware/isAdmin.js";
+import { upload } from "../middleware/multer.js";
 
 const router = express.Router();
 
 router.get("/recipes", verify, getRecipes);
 router.get("/recipes/getCreateRecipe", verify, getCreateRecipe);
-router.post("/recipes/createRecipe", verify, createRecipe);
+router.post("/recipes/createRecipe", verify, upload.single("recipeImage"), createRecipe);
 // router.get("/", verify, getRecipes);
 // router.post("/", verify, createRecipe);
 router.get("/recipes/:id", verify, getRecipe);

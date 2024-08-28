@@ -2,6 +2,8 @@ import { User } from "../models/User.js";
 import { Recipe } from "../models/Recipe.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import fs from "fs";
+import { uploadOnCloudinary } from "../utils/cloudinary.js";
 
 export const getCreateRecipe = async (req, res) => {
     return res.status(200).render("createRecipe");
@@ -45,7 +47,21 @@ export const createRecipe = async (req, res) => {
                 .json({ message: "This session has expired. Please login" });
         }
 
+        // console.log(req.file.path);
+        const recipeImageLocalPath = req.file.path;
+        console.log("Recipe Image Local Path ---> ", recipeImageLocalPath);
+
+        const recipeImage = await uploadOnCloudinary(recipeImageLocalPath);
+
+        if (recipeImage.url) {
+            fs.unlinkSync(recipeImageLocalPath);
+            console.log(
+                "Image removed from local server and uploaded to remote successfully.."
+            );
+        }
+
         const newRecipe = await Recipe.create({
+            recipeImage: recipeImage.url || "",
             title,
             description,
             totalTime,

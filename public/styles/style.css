@@ -34,7 +34,7 @@
     width: auto;
     justify-content: center;
     align-items: center;
-    margin: 35px 35px 0px 35px;
+    margin: 20px 35px 0px 35px;
 }
 
 .image > img {
@@ -380,7 +380,24 @@ a {
 .recipes {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    grid-auto-rows: minmax(100px, auto);
+    grid-auto-rows: minmax(auto, auto);
+}
+
+.single_recipe_image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.single_recipe_image img {
+    padding: auto;
+    height: auto;
+    width: 100%;
+    border-radius: 10px;
+    object-fit: fill;
 }
 
 .recipeCard {
