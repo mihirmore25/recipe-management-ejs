@@ -1,9 +1,11 @@
 <%- include("./partials/header", {title: "Recipes"}); %>
 <h2>Recipes</h2>
+<h3 id="errorMsg" style="color: #8b0000; margin-top: 20px;"><%= error_msg %></h3>
+<h3 id="successMsg" style="color: green; margin-top: 20px;"><%= success_msg %></h3>
 <div class="recipes">
     <% recipes.forEach(recipe => { %>
     <div class="recipeCard">
-        <div class="single_recipe_image">
+        <div class="single_recipe_image" style="background-color: antiquewhite;">
             <img
                 class="single_recipe_image"
                 src="<%= recipe.recipeImage %>"

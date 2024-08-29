@@ -23,7 +23,7 @@ router.post("/recipes/createRecipe", verify, upload.single("recipeImage"), creat
 router.get("/recipes/:id", verify, getRecipe);
 router.get("/recipes/:id/deleteRecipe", verify, deleteRecipe);
 router.get("/recipes/:id/getUpdateRecipe", verify, getUpdateRecipe);
-router.post("/recipes/:id", verify, updateRecipe);
+router.post("/recipes/:id", verify, upload.single("recipeImage"), updateRecipe);
 
 router.get("/users/:id/", verify, getUserRecipes);
 

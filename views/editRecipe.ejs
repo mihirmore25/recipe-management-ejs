@@ -1,7 +1,15 @@
 <%- include("./partials/header", {title: "Create Recipe"}) %>
 <div class="form">
-    <form action="/recipes/<%= recipe._id %>" method="post">
+    <form
+        action="/recipes/<%= recipe._id %>"
+        method="post"
+        enctype="multipart/form-data"
+    >
+        <h3 id="errorMsg" style="color: #8b0000; margin-top: 20px">
+            <%= error_msg %>
+        </h3>
         <h2>Update Recipe</h2>
+        <input type="file" name="recipeImage" placeholder="image" value="<%= recipe.recipeImage %>" />
         <input
             type="text"
             name="title"
@@ -16,15 +24,36 @@
             maxlength="200"
             class="description"
         >
-<%= recipe.description %></textarea>
-        <input type="text" name="totalTime" placeholder="total time" value="<%= recipe.totalTime %>" />
-        <input type="text" name="prepTime" placeholder="preparation time" value="<%= recipe.prepTime %>" />
-        <input type="text" name="cookingTime" placeholder="cooking time" value="<%= recipe.cookingTime %>" />
+<%= recipe.description %></textarea
+        >
+        <input
+            type="text"
+            name="totalTime"
+            placeholder="total time"
+            value="<%= recipe.totalTime %>"
+        />
+        <input
+            type="text"
+            name="prepTime"
+            placeholder="preparation time"
+            value="<%= recipe.prepTime %>"
+        />
+        <input
+            type="text"
+            name="cookingTime"
+            placeholder="cooking time"
+            value="<%= recipe.cookingTime %>"
+        />
         <div class="ingredientList">
             <% recipe.ingredients.forEach(ingredient => {%>
-                <div class="ingredientDiv">
-                    <input type="text" name="ingredients" class="ingredients" value="<%= ingredient %>" />
-                </div>
+            <div class="ingredientDiv">
+                <input
+                    type="text"
+                    name="ingredients"
+                    class="ingredients"
+                    value="<%= ingredient %>"
+                />
+            </div>
             <% }) %>
         </div>
         <button type="button" id="addIngredientsBtn" class="addIngredient">
@@ -32,18 +61,43 @@
         </button>
         <div class="instructionList">
             <% recipe.instructions.forEach(instruction => { %>
-                <div class="instructionDiv">
-                    <input type="text" name="instructions" class="ingredients" value="<%= instruction %>" />
-                </div>
+            <div class="instructionDiv">
+                <input
+                    type="text"
+                    name="instructions"
+                    class="ingredients"
+                    value="<%= instruction %>"
+                />
+            </div>
             <% }) %>
         </div>
         <button type="button" id="addInstructionsBtn" class="addInstruction">
             + Instruction
         </button>
-        <input type="text" name="calories" placeholder="calories" value="<%= recipe.calories %>"/>
-        <input type="text" name="carbs" placeholder="carbs" value="<%= recipe.carbs %>" />
-        <input type="text" name="protein" placeholder="protein" value="<%= recipe.protein %>" />
-        <input type="text" name="fat" placeholder="fat" value="<%= recipe.fat %>" />
+        <input
+            type="text"
+            name="calories"
+            placeholder="calories"
+            value="<%= recipe.calories %>"
+        />
+        <input
+            type="text"
+            name="carbs"
+            placeholder="carbs"
+            value="<%= recipe.carbs %>"
+        />
+        <input
+            type="text"
+            name="protein"
+            placeholder="protein"
+            value="<%= recipe.protein %>"
+        />
+        <input
+            type="text"
+            name="fat"
+            placeholder="fat"
+            value="<%= recipe.fat %>"
+        />
         <button type="submit" class="createRecipe">Update Recipe</button>
     </form>
 </div>

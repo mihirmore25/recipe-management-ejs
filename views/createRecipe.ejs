@@ -1,6 +1,7 @@
 <%- include("./partials/header", {title: "Create Recipe"}) %>
 <div class="form">
     <form action="/recipes/createRecipe" method="post" enctype="multipart/form-data">
+        <h3 id="errorMsg" style="color: #8b0000; margin-top: 20px;"><%= error_msg %></h3>
         <h2>Create Recipe</h2>
         <input type="file" name="recipeImage" placeholder="image">
         <input type="text" name="title" placeholder="title" />
