@@ -444,6 +444,12 @@ a {
     margin: 0px 0px 15px 15px;
 }
 
+.recipeBtns {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
 .viewBtn {
     margin-left: 15px;
     margin-bottom: 20px;
@@ -509,6 +515,11 @@ select > option {
         margin: 0px;
         height: auto;
         width: 100%;
+    }
+
+    .image > img {
+        border: none;
+        border-radius: 0px;
     }
 
     .description {

@@ -2,7 +2,11 @@
 <div class="wrapper">
     <div class="card">
         <div class="image">
-            <img class="image" src="<%= recipe.recipeImage %>" alt="<%= recipe.title %>" />
+            <img
+                class="image"
+                src="<%= recipe.recipeImage %>"
+                alt="<%= recipe.title %>"
+            />
         </div>
         <div class="recipe">
             <div class="title">
@@ -83,18 +87,22 @@
                     <p class="num" id="num"><%= recipe.fat %> g</p>
                 </div>
             </div>
-            <a href="/recipes">Back to Recipes</a>
-            <% if ((user._id.toString() == recipe.user._id.toString()) ||
-            user.role == "admin") { %>
-            <a href="/recipes/<%= recipe._id %>/deleteRecipe" class="deleteBtn"
-                >Delete Recipe</a
-            >
-            <a
-                href="/recipes/<%= recipe._id %>/getUpdateRecipe"
-                class="deleteBtn"
-                >Update Recipe</a
-            >
-            <% } %>
+            <div class="recipeBtns">
+                <a href="/recipes">Back to Recipes</a>
+                <% if ((user._id.toString() == recipe.user._id.toString()) ||
+                user.role == "admin") { %>
+                <a
+                    href="/recipes/<%= recipe._id %>/deleteRecipe"
+                    class="deleteBtn"
+                    >Delete Recipe</a
+                >
+                <a
+                    href="/recipes/<%= recipe._id %>/getUpdateRecipe"
+                    class="deleteBtn"
+                    >Update Recipe</a
+                >
+                <% } %>
+            </div>
         </div>
     </div>
 </div>
