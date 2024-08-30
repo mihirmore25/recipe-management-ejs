@@ -13,18 +13,20 @@ export const verify = async (req, res, next) => {
     console.log("Token --> ", token);
 
     if (!token) {
-        return res
-            .status(401)
-            .json(
-                "Not authorize to access this route, Please try logging in first."
-            );
+        req.flash(
+            "error_msg",
+            "Not authorize to access this route, Please try logging in first."
+        );
+        return res.redirect("/login");
     }
 
     jwt.verify(token, process.env.JWT_SECRET, async (err, user_data) => {
         if (err) {
-            return res
-                .status(401)
-                .json({ message: "This session has expired. Please login" });
+            req.flash(
+                "error_msg",
+                "Not authorize to access this route, Please try logging in first."
+            );
+            return res.redirect("/login");
         }
 
         const { id } = user_data;

@@ -7,10 +7,8 @@ export const isAdmin = (req, res, next) => {
     const { role } = user;
 
     if (role !== "admin") {
-        return res.status(401).json({
-            status: false,
-            message: "You are not authorized to access this page.",
-        });
+        req.flash("error_msg", "You are not authorized to access this page.");
+        return res.redirect("/");
     }
     next();
 };
