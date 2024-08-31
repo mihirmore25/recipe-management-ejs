@@ -2,29 +2,34 @@
 <h2>Recipes</h2>
 <h3 id="errorMsg" style="color: #8b0000; margin-top: 20px;"><%= error_msg %></h3>
 <h3 id="successMsg" style="color: green; margin-top: 20px;"><%= success_msg %></h3>
-<div class="recipes">
-    <% recipes.forEach(recipe => { %>
-    <div class="recipeCard">
-        <div class="single_recipe_image" style="background-color: antiquewhite;">
-            <img
-                class="single_recipe_image"
-                src="<%= recipe.recipeImage %>"
-                alt="<%= recipe.title %>"
-            />
+<% if (recipes.length > 0) { %>
+    <div class="recipes">
+        <% recipes.forEach(recipe => { %>
+        <div class="recipeCard">
+            <div class="single_recipe_image" style="background-color: antiquewhite;">
+                <img
+                    class="single_recipe_image"
+                    src="<%= recipe.recipeImage %>"
+                    alt="<%= recipe.title %>"
+                />
+            </div>
+            <h3><%= recipe.title %></h3>
+            <% if (recipe.description.length > 100) { %>
+            <p><%= recipe.description.substring(0, 100) %>...</p>
+            <% } else { %>
+            <p><%= recipe.description %></p>
+            <% } %>
+            <a href="/users/<%= recipe.user._id %>" class="usernameLink">
+                @ <%= recipe.user.username %>
+            </a>
+            <a href="/recipes/<%= recipe._id %>" class="viewBtn">View</a>
         </div>
-        <h3><%= recipe.title %></h3>
-        <% if (recipe.description.length > 100) { %>
-        <p><%= recipe.description.substring(0, 100) %>...</p>
-        <% } else { %>
-        <p><%= recipe.description %></p>
-        <% } %>
-        <a href="/users/<%= recipe.user._id %>" class="usernameLink">
-            @ <%= recipe.user.username %>
-        </a>
-        <a href="/recipes/<%= recipe._id %>" class="viewBtn">View</a>
+        <% }) %>
     </div>
-    <% }) %>
-</div>
-<a href="/recipes/getCreateRecipe">Create Recipe</a>
-<a href="/logout">Logout</a>
+    <a href="/recipes/getCreateRecipe">Create Recipe</a>
+    <a href="/logout">Logout</a>
+<% } else if (recipes.length <= 0) { %>
+    <a href="/recipes/getCreateRecipe">Create Recipe</a>
+    <a href="/logout">Logout</a>
+<% } %>
 <%- include("./partials/footer") %>

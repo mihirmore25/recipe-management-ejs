@@ -113,11 +113,7 @@ export const getRecipes = async (req, res) => {
         .populate("user", "username email _id")
         .sort({ createdAt: -1 });
 
-    if (recipes.length <= 0 || recipes === null || recipes === undefined) {
-        req.flash("error_msg", "No Recipes found! Try creating new recipe.");
-        return res.redirect("/recipes");
-    }
-    console.log("Recipes --> ", recipes);
+    console.log("Recipes --> ", recipes, recipes.length);
 
     const user = req.user;
 
@@ -132,16 +128,43 @@ export const getRecipe = async (req, res) => {
         return res.redirect("/recipes");
     }
 
-    const recipe = await Recipe.findById(recipeId).select("-__v").lean();
-
-    if (recipeId && (recipe === null || undefined || 0)) {
+    const recipe = await Recipe.findOne({ _id: recipeId })
+        .select("-__v")
+        .lean();
+    if (recipe === null || undefined || 0) {
         req.flash("error_msg", "Recipe did not found!");
         return res.redirect("/recipes");
     }
-    console.log("Recipe --> ", recipe);
+    // console.log("Recipe --> ", recipe);
 
-    const user = req.user;
+    // const user = req.user;
+    const user = await User.findById(req.user._id);
+    // console.log("User -> ", user._id, user);
+    // Check if the user has already viewed the recipe
 
+    if (!user.viewedRecipes.includes(recipe._id)) {
+        // Increment view count if user hasn't viewed the recipe yet
+        let updateViewCount = await Recipe.updateOne(
+            { _id: recipe._id },
+            {
+                $set: {
+                    views: recipe.views + 1,
+                },
+            }
+        );
+        console.log("After ", updateViewCount);
+
+        // Add the post to the user's viewedRecipes array
+        let updateViewedRecipes = await User.updateOne(
+            { _id: user._id },
+            {
+                $push: {
+                    viewedRecipes: recipe._id,
+                },
+            }
+        );
+        console.log("After ", user);
+    }
     return res.status(200).render("recipe", { recipe, user });
 };
 

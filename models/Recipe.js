@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import { User } from "./User.js";
 const Schema = mongoose.Schema;
+import { User } from "./User.js";
 
 const recipeSchema = new Schema(
     {
@@ -63,12 +63,13 @@ const recipeSchema = new Schema(
             required: [true, "Your recipe fat required"],
             default: 0,
         },
+        views: { type: Number, default: 0 },
         user: {
             type: Schema.Types.ObjectId,
-            ref: User,
+            ref: "User",
         },
     },
     { timestamps: true }
 );
 
-export const Recipe = mongoose.model("recipe", recipeSchema);
+export const Recipe = mongoose.model("Recipe", recipeSchema);

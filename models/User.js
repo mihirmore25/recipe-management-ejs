@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { Recipe } from "./Recipe.js";
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema(
@@ -36,6 +37,12 @@ const userSchema = new Schema(
             enum: ["user", "admin"],
             default: "user",
         },
+        viewedRecipes: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: "Recipe",
+            },
+        ],
     },
     {
         timestamps: true,
@@ -69,4 +76,4 @@ userSchema.pre("save", function (next) {
     });
 });
 
-export const User = mongoose.model("user", userSchema);
+export const User = mongoose.model("User", userSchema);
