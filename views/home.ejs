@@ -1,14 +1,22 @@
 <%- include("./partials/header", {title: "Home"}); %>
 <div class="form">
     <form action="/" method="post">
-        <h3 id="errorMsg" style="color: #8b0000; margin-top: 20px;"><%= error_msg %></h3>
-        <h3 id="successMsg" style="color: green; margin-top: 20px;"><%= success_msg %></h3>
+        <h3 id="errorMsg" style="color: #8b0000; margin-top: 20px">
+            <%= error_msg %>
+        </h3>
+        <h3 id="successMsg" style="color: green; margin-top: 20px">
+            <%= success_msg %>
+        </h3>
         <h2>Register</h2>
         <input placeholder="username" name="username" type="text" />
         <input type="email" name="email" placeholder="email" />
         <input type="password" name="password" placeholder="password" />
         <button type="submit">Register</button>
-        <a href="/login" class="loginBtn">Login</a>
+        <a href="/login">Login</a>
+        <a href="/auth/google" role="button" class="googleBtn">
+            <i class="fab fa-google"></i>
+            Sign In With Google
+        </a>
     </form>
 </div>
 <%- include("./partials/footer") %>

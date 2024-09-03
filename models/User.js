@@ -43,6 +43,11 @@ const userSchema = new Schema(
                 ref: "Recipe",
             },
         ],
+        googleId: {
+            type: String,
+            default: null,
+            select: false,
+        },
     },
     {
         timestamps: true,

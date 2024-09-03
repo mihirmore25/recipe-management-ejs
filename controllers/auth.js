@@ -1,6 +1,13 @@
 import { User } from "../models/User.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import passport from "../config/passport.js";
+
+const generateToken = (user) => {
+    return jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
+        expiresIn: "30m",
+    });
+};
 
 export const getRegister = async (req, res) => {
     return res.status(200).render("home");
@@ -39,7 +46,7 @@ export const register = async (req, res) => {
 
     console.log("User Data ---> ", user_data);
 
-    req.flash("success_msg", "You have registered successfully! Please login.")
+    req.flash("success_msg", "You have registered successfully! Please login.");
     return res.status(201).redirect("/login");
 };
 
@@ -82,22 +89,33 @@ export const login = async (req, res) => {
         .redirect("recipes");
 };
 
+export const googleAuth = passport.authenticate("google", {
+    scope: ["profile", "email"],
+});
+
+export const googleAuthCallback = (req, res, next) => {
+    passport.authenticate("google", (err, user) => {
+        if (err) return next(err);
+        if (!user) return res.redirect("/");
+
+        const token = generateToken(user);
+        res.cookie("access_token", token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+        });
+        res.redirect("/recipes");
+    })(req, res, next);
+};
+
 export const logout = async (req, res) => {
-    let token;
-
-    token = req.cookies.access_token;
-
-    let user_data = jwt.verify(token, process.env.JWT_SECRET);
-
-    const user = await User.findById(user_data.id);
-    console.log(user);
-
-    req.flash("success_msg", "You have been logged out successfully!")
-    return res
-        .clearCookie("access_token", {
-            sameSite: "none",
-            secure: true,
-        })
-        .status(200)
-        .redirect("/");
+    req.flash("success_msg", "You have been logged out successfully!");
+    res.clearCookie("access_token", {
+        sameSite: "none",
+        secure: true,
+    });
+    req.logout((err) => {
+        if (err) return next(err);
+        req.flash("success_msg", "You have been logged out successfully!");
+        return res.status(200).redirect("/");
+    });
 };

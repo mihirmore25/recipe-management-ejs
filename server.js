@@ -7,6 +7,7 @@ import userRoutes from "./routes/users.js";
 import recipeRoutes from "./routes/recipes.js";
 import morgan from "morgan";
 import { dbClient } from "./db/db.js";
+import passport from "./config/passport.js";
 const app = express();
 
 // DB connection
@@ -23,6 +24,10 @@ app.use(
         saveUninitialized: true,
     })
 );
+
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use(flash());
 app.use((req, res, next) => {
     res.locals.success_msg = req.flash("success_msg");
