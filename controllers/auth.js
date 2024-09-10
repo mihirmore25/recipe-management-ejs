@@ -1,7 +1,9 @@
 import { User } from "../models/User.js";
 import bcrypt from "bcryptjs";
+import crypto from "crypto";
 import jwt from "jsonwebtoken";
 import passport from "../config/passport.js";
+import { sendResetPasswordEmail } from "../utils/nodemailer.js";
 
 const generateToken = (user) => {
     return jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
@@ -118,4 +120,101 @@ export const logout = async (req, res) => {
         req.flash("success_msg", "You have been logged out successfully!");
         return res.status(200).redirect("/");
     });
+};
+
+export const forgotPassword = async (req, res) => {
+    const { email } = req.body;
+
+    try {
+        if (!email) {
+            req.flash("error_msg", "Email Id is required!");
+            return res.status(400).redirect("/login");
+        }
+
+        const user = await User.findOne({ email });
+        console.log(user.email);
+
+        if (!user) {
+            req.flash("error_msg", "User not found, with this email id!");
+            return res.status(404).redirect("/login");
+        }
+
+        const token = crypto.randomBytes(20).toString("hex");
+        user.resetPasswordToken = token;
+        user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
+
+        await user.save();
+        console.log("After", user);
+
+        sendResetPasswordEmail(user.email, token).then((response) => {
+            console.log(response.response);
+            req.flash("success_msg", "Forgot Password Mail Sent Successfully!");
+            return res.status(200).render("forgotPassword");
+        });
+    } catch (error) {
+        return res.status(500).redirect("/login");
+    }
+};
+
+export const getResetPassword = async (req, res) => {
+    const { token } = req.params;
+
+    const user = await User.findOne({
+        resetPasswordToken: token,
+        resetPasswordExpires: { $gt: Date.now() },
+    });
+
+    if (!user) {
+        req.flash(
+            "error_msg",
+            "Password reset token is invalid or has expired."
+        );
+        return res.status(200).render("resetPassword");
+    }
+
+    return res.status(200).render("resetPassword", { token });
+};
+
+export const postResetPassword = async (req, res) => {
+    const { token } = req.params;
+    const { password } = req.body;
+
+    const user = await User.findOne({
+        resetPasswordToken: token,
+        resetPasswordExpires: { $gt: Date.now() },
+    });
+
+    if (!user) {
+        req.flash("error_msg", "Invalid or expired token");
+        return res.status(400).redirect("forgotPassword");
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    const hash = await bcrypt.hash(password, salt);
+
+    const updateUserPassword = await User.updateOne(
+        {
+            resetPasswordToken: token,
+            resetPasswordExpires: { $gt: Date.now() },
+        },
+        {
+            $set: {
+                password: hash,
+                resetPasswordToken: null,
+                resetPasswordExpires: null,
+            },
+        },
+        {
+            new: true,
+            save: true,
+        }
+    );
+
+    console.log(updateUserPassword);
+
+    let newToken = user.generateJWT();
+    return res
+        .cookie("access_token", newToken, { httpOnly: true })
+        .status(200)
+        .redirect("/recipes");
 };

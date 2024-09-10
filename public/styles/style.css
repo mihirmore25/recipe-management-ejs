@@ -261,6 +261,10 @@ h2 {
 }
 
 .loginBtn {
+    margin-bottom: 0px;
+}
+
+.forgotPasswordBtn {
     margin-bottom: 40px;
 }
 
