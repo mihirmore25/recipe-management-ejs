@@ -109,15 +109,52 @@ export const createRecipe = async (req, res) => {
 };
 
 export const getRecipes = async (req, res) => {
-    const recipes = await Recipe.find()
-        .populate("user", "username email _id")
-        .sort({ createdAt: -1 });
+    try {
+        const page = parseInt(req.query.page) || 1; // Default to page 1
+        const limit = parseInt(req.query.limit) || 10; // Default to 10 items per page
+        const sort = req.query.sort || "createdAt"; // Default sort by createdAt
+        const order = req.query.order === "desc" ? -1 : 1; // Default order is ascending
 
-    console.log("Recipes --> ", recipes, recipes.length);
+        const skip = (page - 1) * limit;
 
-    const user = req.user;
+        // Get the total count of recipes
+        const totalRecipes = await Recipe.countDocuments();
 
-    return res.status(200).render("recipes", { recipes, user });
+        // Fetch the paginated data
+        const recipes = await Recipe.find({})
+            .populate("user", "username email _id")
+            .sort({ [sort]: order })
+            .skip(skip)
+            .limit(limit);
+
+        const user = req.user;
+
+        // Calculate total pages
+        const totalPages = Math.ceil(totalRecipes / limit);
+
+        res.status(200).render("recipes", {
+            recipes,
+            currentPage: page,
+            totalPages,
+            totalRecipes,
+            limit,
+            sort,
+            order,
+        });
+    } catch (error) {
+        console.error(error);
+        req.flash("error_msg", "An error occured while fetching recipes");
+        res.status(500).redirect("/recipes");
+    }
+    // const recipes = await Recipe.find()
+    //     .populate("user", "username email _id")
+    //     .sort({ createdAt: -1 });
+
+    // console.log("Recipes --> ", recipes, recipes.length);
+
+    // const user = req.user;
+
+    // return res.status(200).render("recipes", { recipes, user });
 };
 
 export const getRecipe = async (req, res) => {

@@ -509,6 +509,22 @@ select > option {
     margin-bottom: 30px;
 }
 
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    justify-items: center;
+}
+
+.pagination > a {
+    margin: 10px;
+}
+
+.pagination > .active {
+    background-color: hsl(330, 100%, 98%);
+    color: hsl(332, 51%, 32%);
+}
+
 @media only screen and (width <= 550px) {
     .card {
         margin-top: 0px;

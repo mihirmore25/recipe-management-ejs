@@ -1,13 +1,19 @@
 <%- include("./partials/header", {title: "Login"}); %>
 <div class="form">
     <form action="/login" method="post">
-        <h3 id="errorMsg" style="color: #8b0000; margin-top: 20px"><%= error_msg %></h3>
-        <h3 id="successMsg" style="color: green; margin-top: 20px;"><%= success_msg %></h3>
+        <h3 id="errorMsg" style="color: #8b0000; margin-top: 20px">
+            <%= error_msg %>
+        </h3>
+        <h3 id="successMsg" style="color: green; margin-top: 20px">
+            <%= success_msg %>
+        </h3>
         <h2>Login</h2>
         <input type="email" name="email" placeholder="email" />
         <input type="password" name="password" placeholder="password" />
-        <button type="submit" class="loginBtn">Login</button>
-        <a href="/auth/forgotPassword" class="forgotPasswordBtn">Forgot Password?</a>
+        <button type="submit" class="loginBtn" id="loginBtn">Login</button>
+        <a href="/auth/forgotPassword" class="forgotPasswordBtn"
+            >Forgot Password?</a
+        >
     </form>
 </div>
 <%- include("./partials/footer") %>
