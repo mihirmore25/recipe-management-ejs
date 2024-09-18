@@ -1,5 +1,6 @@
 import express from "express";
 import helmet from "helmet";
+import cors from "cors";
 import cookieParser from "cookie-parser";
 import session from "express-session";
 import flash from "connect-flash";
@@ -15,6 +16,12 @@ const app = express();
 dbClient();
 
 // Middleware
+app.use(
+    cors({
+        origin: "http://localhost:3000",
+        optionsSuccessStatus: 200,
+    })
+);
 app.use(
     helmet({
         contentSecurityPolicy: {
