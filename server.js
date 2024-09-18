@@ -1,4 +1,5 @@
 import express from "express";
+import helmet from "helmet";
 import cookieParser from "cookie-parser";
 import session from "express-session";
 import flash from "connect-flash";
@@ -14,6 +15,16 @@ const app = express();
 dbClient();
 
 // Middleware
+app.use(
+    helmet({
+        contentSecurityPolicy: {
+            directives: {
+                ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+                "img-src": ["'self'", "data:", "http://res.cloudinary.com/"],
+            },
+        },
+    })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
