@@ -4,6 +4,17 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import fs from "fs";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
+import { Redis } from "ioredis";
+
+const client = new Redis();
+
+client.on("connect", () => {
+    console.log(`Connected to Redis successfully...`);
+});
+
+client.on("error", (error) => {
+    console.error(`Redis connection error : ${error}`);
+});
 
 export const getCreateRecipe = async (req, res) => {
     return res.status(200).render("createRecipe");
@@ -120,8 +131,25 @@ export const getRecipes = async (req, res) => {
         // Get the total count of recipes
         const totalRecipes = await Recipe.countDocuments();
 
+        // Calculate total pages
+        const totalPages = Math.ceil(totalRecipes / limit);
+
+        let recipes = await client.get("recipes");
+        if (recipes) {
+            recipes = JSON.parse(recipes);
+            return res.status(200).render("recipes", {
+                recipes,
+                currentPage: page,
+                totalPages,
+                totalRecipes,
+                limit,
+                sort,
+                order,
+            });
+        }
+
         // Fetch the paginated data
-        const recipes = await Recipe.find({})
+        recipes = await Recipe.find({})
             .populate("user", "username email _id")
             .sort({ [sort]: order })
             .skip(skip)
@@ -129,8 +157,7 @@ export const getRecipes = async (req, res) => {
 
         const user = req.user;
 
-        // Calculate total pages
-        const totalPages = Math.ceil(totalRecipes / limit);
+        await client.setex("recipes", 120, JSON.stringify(recipes, null, 4));
 
         res.status(200).render("recipes", {
             recipes,
@@ -346,12 +373,10 @@ export const getUserRecipes = async (req, res) => {
     const user = await User.findById(userId);
     // console.log(user);
 
-    const recipes = await Recipe.find({ user: userId }).sort({ createdAt: -1 });
-
-    console.log(recipes);
-
     const username =
         user.username[0].toUpperCase() + user.username.substring(1);
+
+    const recipes = await Recipe.find({ user: userId }).sort({ createdAt: -1 });
 
     return res.status(200).render("userRecipes", { recipes, username, user });
 };
