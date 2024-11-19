@@ -5,6 +5,7 @@ import {
     logout,
     getRegister,
     getLogin,
+    loginAsGuest,
     googleAuth,
     googleAuthCallback,
     forgotPassword,
@@ -18,6 +19,7 @@ router.get("/", getRegister);
 router.post("/", register);
 router.get("/login", getLogin);
 router.post("/login", login);
+router.get("/guestLogin", loginAsGuest);
 router.get("/logout", logout);
 router.get("/auth/google", googleAuth);
 router.get("/auth/google/recipes", googleAuthCallback);

@@ -91,6 +91,40 @@ export const login = async (req, res) => {
         .redirect("recipes");
 };
 
+export const loginAsGuest = async (req, res) => {
+    try {        
+        // Create a new guest user dynamically for the session
+        const guestUser = new User({
+            username: `Guest_${Date.now()}`, // Unique guest username
+            email: `guest_${Date.now()}@example.com`, // Unique email
+            password: `guest@123`, // No password for guest users
+            role: "guest", // Assign the guest role
+        });
+
+        console.log(guestUser);
+        
+
+        // Save the guest user in the database
+        await guestUser.save();
+
+        // Generate a JWT for the guest user
+        const token = jwt.sign(
+            { id: guestUser._id, role: "guest" },
+            process.env.JWT_SECRET,
+            { expiresIn: "30m" } // Token valid for 30 min
+        );
+
+        // Set the token in a cookie
+        res.cookie("access_token", token, { httpOnly: true })
+            .status(200)
+            .redirect("/recipes"); // Redirect to the recipes page
+    } catch (error) {
+        console.error("Error during guest login:", error);
+        req.flash("error_msg", "Unable to login as guest. Please try again!");
+        res.redirect("/login");
+    }
+};
+
 export const googleAuth = passport.authenticate("google", {
     scope: ["profile", "email"],
 });
