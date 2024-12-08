@@ -458,6 +458,20 @@ a {
     align-items: center;
 }
 
+.recipeBtns > a {
+    margin: 0px 0px 0px 5px;
+}
+
+.views {
+    display: flex;
+    align-items: center;
+    flex-direction: row-reverse;
+    font-family: "Outfit", sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: hsl(14, 45%, 36%);
+}
+
 .viewBtn {
     margin-left: 15px;
     margin-bottom: 20px;
