@@ -64,6 +64,7 @@ const recipeSchema = new Schema(
             default: 0,
         },
         views: { type: Number, default: 0 },
+        likes: { type: Number, default: 0 },
         user: {
             type: Schema.Types.ObjectId,
             ref: "User",

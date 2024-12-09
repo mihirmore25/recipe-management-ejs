@@ -43,6 +43,12 @@ const userSchema = new Schema(
                 ref: "Recipe",
             },
         ],
+        likedRecipes: [
+            {
+                type: Schema.Types.ObjectId,
+                ref: "Recipe",
+            },
+        ],
         googleId: {
             type: String,
             default: null,

@@ -8,6 +8,7 @@ import {
     getRecipes,
     getUpdateRecipe,
     getUserRecipes,
+    likeRecipe,
     updateRecipe,
 } from "../controllers/recipe.js";
 import { isAdmin } from "../middleware/isAdmin.js";
@@ -29,6 +30,7 @@ router.get("/recipes/:id", verify, getRecipe);
 router.get("/recipes/:id/deleteRecipe", verify, deleteRecipe);
 router.get("/recipes/:id/getUpdateRecipe", verify, getUpdateRecipe);
 router.post("/recipes/:id", verify, upload.single("recipeImage"), updateRecipe);
+router.post("/recipes/:id/like", verify, likeRecipe);
 
 router.get("/users/:id/", verify, getUserRecipes);
 

@@ -102,9 +102,13 @@
                     >Update Recipe</a
                 >
                 <% } %>
+                <form action="/recipes/<%= recipe._id %>/like" method="POST">
+                    <button class="likeBtn" type="submit">Like</button>
+                </form>
             </div>
             <div class="views">
                 <span><%= recipe.views %> views</span>
+                <span><%= recipe.likes %> likes</span>
             </div>
         </div>
     </div>

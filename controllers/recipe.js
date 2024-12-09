@@ -380,3 +380,62 @@ export const getUserRecipes = async (req, res) => {
 
     return res.status(200).render("userRecipes", { recipes, username, user });
 };
+
+export const likeRecipe = async (req, res) => {
+    const recipeId = req.params.id;
+
+    if (!recipeId || String(recipeId).length < 24) {
+        req.flash("error_msg", "Recipe did not found!");
+        return res.redirect("/recipes");
+    }
+
+    const recipe = await Recipe.findOne({ _id: recipeId })
+        .select("-__v")
+        .lean();
+
+    if (recipe === null || undefined || 0) {
+        req.flash("error_msg", "Recipe did not found!");
+        return res.redirect("/recipes");
+    }
+
+    // const recipe = await Recipe.findByIdAndUpdate(
+    //     recipeId,
+    //     {
+    //         $inc: { likes: 1 },
+    //     },
+    //     {
+    //         new: true,
+    //     }
+    // );
+
+    const user = await User.findById(req.user._id);
+
+    if (!user.likedRecipes.includes(recipe._id)) {
+        // Increment likes count if user hasn't liked the recipe yet
+        let updateLikeCount = await Recipe.updateOne(
+            { _id: recipe._id },
+            {
+                // $set: {
+                //     likes: recipe.likes + 1,
+                // },
+                $inc: {
+                    likes: 1,
+                }
+            }
+        );
+        console.log("After ", updateLikeCount);
+
+        // Add the like to the user's likedRecipes array
+        let updateLikedRecipes = await User.updateOne(
+            { _id: user._id },
+            {
+                $push: {
+                    likedRecipes: recipe._id,
+                },
+            }
+        );
+        console.log("After ", user);
+    }
+
+    return res.status(200).redirect(`/recipes/${recipeId}`);
+};
