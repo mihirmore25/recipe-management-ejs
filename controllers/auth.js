@@ -71,10 +71,11 @@ export const login = async (req, res) => {
         return res.redirect("/login");
     }
 
-    const isPasswordValid = bcrypt.compareSync(
-        req.body.password,
-        user.password
-    );
+    // const isPasswordValid = bcrypt.compareSync(
+    //     req.body.password,
+    //     user.password
+    // );
+    const isPasswordValid = await user.isPasswordValid(req.body.password);
 
     if (!isPasswordValid) {
         req.flash("error_msg", "Invalid email or password. Please try again!");
@@ -92,7 +93,7 @@ export const login = async (req, res) => {
 };
 
 export const loginAsGuest = async (req, res) => {
-    try {        
+    try {
         // Create a new guest user dynamically for the session
         const guestUser = new User({
             username: `Guest_${Date.now()}`, // Unique guest username
@@ -102,7 +103,6 @@ export const loginAsGuest = async (req, res) => {
         });
 
         console.log(guestUser);
-        
 
         // Save the guest user in the database
         await guestUser.save();
