@@ -10,7 +10,8 @@ import recipeRoutes from "./routes/recipes.js";
 import morgan from "morgan";
 import { dbClient } from "./db/db.js";
 import { User } from "./models/User.js";
-import cron from "node-cron";
+// import cron from "node-cron";
+import { removeGuestUserEveryThrityMinutes } from "./middleware/removeGuestUser.js";
 import passport from "./config/passport.js";
 const app = express();
 
@@ -65,17 +66,21 @@ app.use(express.static("public/js"));
 app.use(express.static("public/temp"));
 
 // Cron job to delete guest users every 30 minutes
-cron.schedule("0,30 * * * *", async () => {
-    try {
-        const result = await User.deleteMany({
-            role: "guest", // Only delete users with the "guest" role
-            createdAt: { $lt: new Date(Date.now() - 2 * 60 * 1000) }, // Older than 2 minutes
-        });
-        console.log(`${result.deletedCount} guest users deleted at ${new Date().toISOString()}`);
-    } catch (error) {
-        console.error("Error deleting guest users:", error);
-    }
-});
+// cron.schedule("0,30 * * * *", async () => {
+//     try {
+//         const result = await User.deleteMany({
+//             role: "guest", // Only delete users with the "guest" role
+//             createdAt: { $lt: new Date(Date.now() - 2 * 60 * 1000) }, // Older than 2 minutes
+//         });
+//         console.log(
+//             `${
+//                 result.deletedCount
+//             } guest users deleted at ${new Date().toISOString()}`
+//         );
+//     } catch (error) {
+//         console.error("Error deleting guest users:", error);
+//     }
+// });
 
 // Routes
 app.use("/", authRoutes);
@@ -83,6 +88,8 @@ app.use("/", userRoutes);
 app.use("/", recipeRoutes);
 
 const PORT = process.env.APP_PORT || 4000;
+
+app.use(removeGuestUserEveryThrityMinutes);
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}...`);
