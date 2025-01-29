@@ -6,17 +6,17 @@ export const dbClient = async () => {
     try {
         const connectionInstance = await mongoose.connect(
             `${process.env.MONGO_URI}/${DB_NAME}`,
-            {
-                auth: {
-                    username: process.env.USER,
-                    password: process.env.PASSWORD,
-                },
-                authSource: process.env.AUTH_SOURCE,
-            }
+            // {
+            //     auth: {
+            //         username: process.env.USER,
+            //         password: process.env.PASSWORD,
+            //     },
+            //     authSource: process.env.AUTH_SOURCE,
+            // }
         );
 
         console.log(
-            `MONGODB CONNECTED! ON DB HOST: ${connectionInstance.connection.host} ON PORT: ${connectionInstance.connection.port}`
+            `MONGODB CONNECTED! ON DB HOST: ${connectionInstance.connection.host} ON PORT: ${connectionInstance.connection.port} ON DB: ${connectionInstance.connection.db.databaseName}`
         );
     } catch (e) {
         console.error(`MONGODB CONNECTION ERROR: --> `, e);
