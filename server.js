@@ -58,12 +58,12 @@ app.use((req, res, next) => {
     // res.locals.error = req.flash("error"); // For Passport.js, if used
     next();
 });
-app.use(morgan("dev"));
-app.set("view engine", "ejs");
-// app.use(express.static(__dirname + "/public"));
 app.use(express.static("public/styles"));
 app.use(express.static("public/js"));
 app.use(express.static("public/temp"));
+app.use(morgan("dev"));
+app.set("view engine", "ejs");
+// app.use(express.static(__dirname + "/public"));
 
 // Cron job to delete guest users every 30 minutes
 // cron.schedule("0,30 * * * *", async () => {

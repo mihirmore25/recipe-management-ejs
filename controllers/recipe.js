@@ -17,7 +17,7 @@ client.on("error", (error) => {
 });
 
 export const getCreateRecipe = async (req, res) => {
-    return res.status(200).render("createRecipe");
+    return await res.status(200).render("createRecipe");
 };
 
 export const createRecipe = async (req, res) => {
@@ -32,7 +32,7 @@ export const createRecipe = async (req, res) => {
             "error_msg",
             "Not authorize to access this route, Please try again!"
         );
-        return res.redirect("/recipes");
+        return await res.redirect("/recipes");
     }
 
     const {
@@ -65,13 +65,13 @@ export const createRecipe = async (req, res) => {
         !fat
     ) {
         req.flash("error_msg", "All the given fields are required.");
-        return res.redirect("/recipes/getCreateRecipe");
+        return await res.redirect("/recipes/getCreateRecipe");
     }
 
     jwt.verify(token, process.env.JWT_SECRET, async (err, user_data) => {
         if (err) {
             req.flash("error_msg", "This session has expired. Please login");
-            return res.redirect("/login");
+            return await res.redirect("/login");
         }
 
         // console.log(req.file.path);
@@ -79,13 +79,13 @@ export const createRecipe = async (req, res) => {
         console.log("Recipe Image Local Path ---> ", recipeImageLocalPath);
         if (!recipeImageLocalPath || undefined) {
             req.flash("error_msg", "Please upload your recipe image!");
-            return res.redirect("/recipes/getCreateRecipe");
+            return await res.redirect("/recipes/getCreateRecipe");
         }
 
         const recipeImage = await uploadOnCloudinary(recipeImageLocalPath);
         if (!recipeImage) {
             req.flash("error_msg", "Please upload your recipe image!");
-            return res.redirect("/recipes/getCreateRecipe");
+            return await res.redirect("/recipes/getCreateRecipe");
         }
 
         if (recipeImage.url) {
@@ -115,7 +115,7 @@ export const createRecipe = async (req, res) => {
 
         console.log(newCreatedRecipe._doc);
 
-        return res.status(200).redirect("/recipes");
+        return await res.status(200).redirect("/recipes");
     });
 };
 
@@ -137,7 +137,7 @@ export const getRecipes = async (req, res) => {
         let recipes = await client.get("recipes");
         if (recipes) {
             recipes = JSON.parse(recipes);
-            return res.status(200).render("recipes", {
+            return await res.status(200).render("recipes", {
                 recipes,
                 currentPage: page,
                 totalPages,
@@ -157,9 +157,9 @@ export const getRecipes = async (req, res) => {
 
         const user = req.user;
 
-        await client.setex("recipes", 120, JSON.stringify(recipes, null, 4));
+        await client.setex("recipes", 240, JSON.stringify(recipes, null, 4));
 
-        res.status(200).render("recipes", {
+        return await res.status(200).render("recipes", {
             recipes,
             currentPage: page,
             totalPages,
@@ -171,7 +171,7 @@ export const getRecipes = async (req, res) => {
     } catch (error) {
         console.error(error);
         req.flash("error_msg", "An error occured while fetching recipes");
-        res.status(500).redirect("/recipes");
+        return await res.status(500).redirect("/recipes");
     }
     // const recipes = await Recipe.find()
     //     .populate("user", "username email _id")
@@ -189,7 +189,7 @@ export const getRecipe = async (req, res) => {
 
     if (!recipeId || String(recipeId).length < 24) {
         req.flash("error_msg", "Recipe did not found!");
-        return res.redirect("/recipes");
+        return await res.redirect("/recipes");
     }
 
     const recipe = await Recipe.findOne({ _id: recipeId })
@@ -197,7 +197,7 @@ export const getRecipe = async (req, res) => {
         .lean();
     if (recipe === null || undefined || 0) {
         req.flash("error_msg", "Recipe did not found!");
-        return res.redirect("/recipes");
+        return await res.redirect("/recipes");
     }
     // console.log("Recipe --> ", recipe);
 
@@ -229,7 +229,7 @@ export const getRecipe = async (req, res) => {
         );
         console.log("After ", user);
     }
-    return res.status(200).render("recipe", { recipe, user });
+    return await res.status(200).render("recipe", { recipe, user });
 };
 
 export const deleteRecipe = async (req, res) => {
@@ -239,7 +239,7 @@ export const deleteRecipe = async (req, res) => {
 
     if (!recipeId || String(recipeId).length < 24) {
         req.flash("error_msg", "Recipe did not found!");
-        return res.redirect("/recipes");
+        return await res.redirect("/recipes");
     }
 
     const recipe = await Recipe.findById(recipeId);
@@ -248,7 +248,7 @@ export const deleteRecipe = async (req, res) => {
 
     if (recipeId && (recipe === null || undefined || 0)) {
         req.flash("error_msg", "Recipe did not found!");
-        return res.redirect("/recipes");
+        return await res.redirect("/recipes");
     }
 
     if (
@@ -259,12 +259,12 @@ export const deleteRecipe = async (req, res) => {
 
         console.log("Deleted Recipe --> ", deletedRecipe);
 
-        req.flash("success_msg", "Recipe deleted successfully!");
-        return res.status(200).redirect("/recipes");
+        await req.flash("success_msg", "Recipe deleted successfully!");
+        return await res.status(200).redirect("/recipes");
     }
 
     req.flash("error_msg", "You can only delete your own recipe.");
-    return res.redirect("/recipes");
+    return await res.redirect("/recipes");
 };
 
 export const getUpdateRecipe = async (req, res) => {
@@ -272,17 +272,17 @@ export const getUpdateRecipe = async (req, res) => {
 
     if (!recipeId || String(recipeId).length < 24) {
         req.flash("error_msg", "Recipe did not found!");
-        return res.redirect("/recipes");
+        return await res.redirect("/recipes");
     }
 
     const recipe = await Recipe.findById(recipeId);
 
     if (recipeId && (recipe === null || undefined || 0)) {
         req.flash("error_msg", "Recipe did not found!");
-        return res.redirect("/recipes");
+        return await res.redirect("/recipes");
     }
 
-    return res.status(200).render("editRecipe", { recipe });
+    return await res.status(200).render("editRecipe", { recipe });
 };
 
 export const updateRecipe = async (req, res) => {
@@ -304,14 +304,14 @@ export const updateRecipe = async (req, res) => {
 
     if (!recipeId || String(recipeId).length < 24) {
         req.flash("error_msg", "Recipe did not found!");
-        return res.redirect("/recipes");
+        return await res.redirect("/recipes");
     }
 
     const recipe = await Recipe.findById(recipeId);
 
     if (recipeId && (recipe === null || undefined || 0)) {
         req.flash("error_msg", "Recipe did not found!");
-        return res.redirect("/recipes");
+        return await res.redirect("/recipes");
     }
 
     console.log("User --> ", req.user);
@@ -363,7 +363,7 @@ export const updateRecipe = async (req, res) => {
         // });
 
         req.flash("success_msg", "Recipe Updated successfully!");
-        return res.status(200).redirect("/recipes");
+        return await res.status(200).redirect("/recipes");
     }
 };
 
@@ -378,7 +378,7 @@ export const getUserRecipes = async (req, res) => {
 
     const recipes = await Recipe.find({ user: userId }).sort({ createdAt: -1 });
 
-    return res.status(200).render("userRecipes", { recipes, username, user });
+    return await res.status(200).render("userRecipes", { recipes, username, user });
 };
 
 export const likeRecipe = async (req, res) => {
@@ -386,7 +386,7 @@ export const likeRecipe = async (req, res) => {
 
     if (!recipeId || String(recipeId).length < 24) {
         req.flash("error_msg", "Recipe did not found!");
-        return res.redirect("/recipes");
+        return await res.redirect("/recipes");
     }
 
     const recipe = await Recipe.findOne({ _id: recipeId })
@@ -395,7 +395,7 @@ export const likeRecipe = async (req, res) => {
 
     if (recipe === null || undefined || 0) {
         req.flash("error_msg", "Recipe did not found!");
-        return res.redirect("/recipes");
+        return await res.redirect("/recipes");
     }
 
     // const recipe = await Recipe.findByIdAndUpdate(
@@ -437,5 +437,5 @@ export const likeRecipe = async (req, res) => {
         console.log("After ", user);
     }
 
-    return res.status(200).redirect(`/recipes/${recipeId}`);
+    return await res.status(200).redirect(`/recipes/${recipeId}`);
 };

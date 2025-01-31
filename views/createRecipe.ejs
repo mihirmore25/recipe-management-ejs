@@ -1,9 +1,15 @@
 <%- include("./partials/header", {title: "Create Recipe"}) %>
 <div class="form">
-    <form action="/recipes/createRecipe" method="post" enctype="multipart/form-data">
-        <h3 id="errorMsg" style="color: #8b0000; margin-top: 20px;"><%= error_msg %></h3>
+    <form
+        action="/recipes/createRecipe"
+        method="post"
+        enctype="multipart/form-data"
+    >
+        <h3 id="errorMsg" style="color: #8b0000; margin-top: 20px">
+            <%= error_msg %>
+        </h3>
         <h2>Create Recipe</h2>
-        <input type="file" name="recipeImage" placeholder="image">
+        <input type="file" name="recipeImage" placeholder="image" />
         <input type="text" name="title" placeholder="title" />
         <textarea
             type="text"
@@ -40,27 +46,4 @@
     </form>
 </div>
 <a href="/recipes">Back to Recipes</a>
-<script>
-    let addIngredientsBtn = document.getElementById("addIngredientsBtn");
-    let addInstructionsBtn = document.getElementById("addInstructionsBtn");
-    let instructionList = document.querySelector(".instructionList");
-    let ingredientList = document.querySelector(".ingredientList");
-    let ingredientDiv = document.querySelectorAll(".ingredientDiv")[0];
-    let instructionDiv = document.querySelectorAll(".instructionDiv")[0];
-
-    addIngredientsBtn.addEventListener("click", function () {
-        let newIngredients = ingredientDiv.cloneNode(true);
-        let input = newIngredients.getElementsByTagName("input")[0];
-        input.value = "";
-        ingredientList.appendChild(newIngredients);
-    });
-
-    addInstructionsBtn.addEventListener("click", function () {
-        let newInstructions = instructionDiv.cloneNode(true);
-        let input = newInstructions.getElementsByTagName("input")[0];
-        input.value = "";
-        instructionList.appendChild(newInstructions);
-    });
-</script>
-
 <%- include("./partials/footer") %>
