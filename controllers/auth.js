@@ -12,7 +12,7 @@ const generateToken = (user) => {
 };
 
 export const getRegister = async (req, res) => {
-    return res.status(200).render("home");
+    return await res.status(200).render("home");
 };
 
 export const register = async (req, res) => {
@@ -21,7 +21,7 @@ export const register = async (req, res) => {
 
     if (!username || !email || !password) {
         req.flash("error_msg", "Username, Email, Password are required");
-        return res.redirect("/");
+        return await res.redirect("/");
     }
 
     const newUser = new User({
@@ -39,7 +39,7 @@ export const register = async (req, res) => {
             "error_msg",
             "You already have an account, please log in instead."
         );
-        return res.redirect("/");
+        return await res.redirect("/");
     }
 
     const savedUser = await newUser.save();
@@ -49,11 +49,11 @@ export const register = async (req, res) => {
     console.log("User Data ---> ", user_data);
 
     req.flash("success_msg", "You have registered successfully! Please login.");
-    return res.status(201).redirect("/login");
+    return await res.status(201).redirect("/login");
 };
 
 export const getLogin = async (req, res) => {
-    return res.status(200).render("login");
+    return await res.status(200).render("login");
 };
 
 export const login = async (req, res) => {
@@ -61,14 +61,14 @@ export const login = async (req, res) => {
 
     if (!email || !req.body.password) {
         req.flash("error_msg", "Email, Password are required.");
-        return res.redirect("/login");
+        return await res.redirect("/login");
     }
 
     const user = await User.findOne({ email }).select("+password");
 
     if (!user) {
         req.flash("error_msg", "Invalid email or password. Please try again!");
-        return res.redirect("/login");
+        return await res.redirect("/login");
     }
 
     // const isPasswordValid = bcrypt.compareSync(
@@ -79,14 +79,14 @@ export const login = async (req, res) => {
 
     if (!isPasswordValid) {
         req.flash("error_msg", "Invalid email or password. Please try again!");
-        return res.redirect("/login");
+        return await res.redirect("/login");
     }
 
     const { password, ...user_data } = user._doc;
 
     const token = user.generateJWT();
 
-    return res
+    return await res
         .cookie("access_token", token, { httpOnly: true })
         .status(200)
         .redirect("recipes");
@@ -115,13 +115,13 @@ export const loginAsGuest = async (req, res) => {
         );
 
         // Set the token in a cookie
-        res.cookie("access_token", token, { httpOnly: true })
+        return await res.cookie("access_token", token, { httpOnly: true })
             .status(200)
             .redirect("/recipes"); // Redirect to the recipes page
     } catch (error) {
         console.error("Error during guest login:", error);
         req.flash("error_msg", "Unable to login as guest. Please try again!");
-        res.redirect("/login");
+        return await res.redirect("/login");
     }
 };
 
@@ -144,15 +144,15 @@ export const googleAuthCallback = (req, res, next) => {
 };
 
 export const logout = async (req, res) => {
-    req.flash("success_msg", "You have been logged out successfully!");
-    res.clearCookie("access_token", {
+    await req.flash("success_msg", "You have been logged out successfully!");
+    await res.clearCookie("access_token", {
         sameSite: "none",
         secure: true,
     });
-    req.logout((err) => {
+    await req.logout(async (err) => {
         if (err) return next(err);
         req.flash("success_msg", "You have been logged out successfully!");
-        return res.status(200).redirect("/");
+        return await res.status(200).redirect("/");
     });
 };
 
@@ -162,7 +162,7 @@ export const forgotPassword = async (req, res) => {
     try {
         if (!email) {
             req.flash("error_msg", "Email Id is required!");
-            return res.status(400).redirect("/login");
+            return await res.status(400).redirect("/login");
         }
 
         const user = await User.findOne({ email });
@@ -170,7 +170,7 @@ export const forgotPassword = async (req, res) => {
 
         if (!user) {
             req.flash("error_msg", "User not found, with this email id!");
-            return res.status(404).redirect("/login");
+            return await res.status(404).redirect("/login");
         }
 
         const token = crypto.randomBytes(20).toString("hex");
@@ -180,13 +180,13 @@ export const forgotPassword = async (req, res) => {
         await user.save();
         console.log("After", user);
 
-        sendResetPasswordEmail(user.email, token).then((response) => {
+        sendResetPasswordEmail(user.email, token).then(async (response) => {
             console.log(response.response);
             req.flash("success_msg", "Forgot Password Mail Sent Successfully!");
-            return res.status(200).render("forgotPassword");
+            return await res.status(200).render("forgotPassword");
         });
     } catch (error) {
-        return res.status(500).redirect("/login");
+        return await res.status(500).redirect("/login");
     }
 };
 
@@ -203,10 +203,10 @@ export const getResetPassword = async (req, res) => {
             "error_msg",
             "Password reset token is invalid or has expired."
         );
-        return res.status(200).render("resetPassword");
+        return await res.status(200).render("resetPassword");
     }
 
-    return res.status(200).render("resetPassword", { token });
+    return await res.status(200).render("resetPassword", { token });
 };
 
 export const postResetPassword = async (req, res) => {
@@ -247,7 +247,7 @@ export const postResetPassword = async (req, res) => {
     console.log(updateUserPassword);
 
     let newToken = user.generateJWT();
-    return res
+    return await res
         .cookie("access_token", newToken, { httpOnly: true })
         .status(200)
         .redirect("/recipes");

@@ -4,14 +4,14 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 export const getCreateUser = async (req, res) => {
-    return res.status(200).render("createUser");
+    return await res.status(200).render("createUser");
 };
 
 export const createUser = async (req, res) => {
     const { username, email, password, role } = req.body;
 
     if (!username || !email || !password) {
-        return res.status(400).json({
+        return await res.status(400).json({
             status: false,
             error: res.statusCode,
             data: [],
@@ -31,7 +31,7 @@ export const createUser = async (req, res) => {
     console.log("User Exist --> ", userExist);
 
     if (userExist) {
-        res.status(400).json({
+        return await res.status(400).json({
             status: false,
             error: res.statusCode,
             data: [],
@@ -46,7 +46,7 @@ export const createUser = async (req, res) => {
 
     console.log("User Data ---> ", savedUser);
 
-    return res.status(201).json({
+    return await res.status(201).json({
         status: true,
         data: savedUser,
         message: "New user account has been created successfully.",
@@ -59,13 +59,13 @@ export const getAllUsers = async (req, res) => {
     console.log(users, users.length);
 
     if (users.length === 0) {
-        return res.status(404).json({
+        return await res.status(404).json({
             status: false,
             message: "Users are not found.",
         });
     }
 
-    return res.status(200).json({
+    return await res.status(200).json({
         status: true,
         data: users,
     });
@@ -75,7 +75,7 @@ export const getUser = async (req, res) => {
     const userId = req.params.id;
 
     if (!userId || String(userId).length < 24) {
-        return res.status(404).json({
+        return await res.status(404).json({
             status: false,
             message: "Please search user with valid user id.",
         });
@@ -84,13 +84,13 @@ export const getUser = async (req, res) => {
     const user = await User.findById(userId).select("-__v");
 
     if (userId && (user === null || undefined || 0)) {
-        return res.status(404).json({
+        return await res.status(404).json({
             status: false,
             message: `User did not found with ${userId} id.`,
         });
     }
 
-    return res.status(200).json({
+    return await res.status(200).json({
         status: true,
         data: user,
     });
@@ -100,7 +100,7 @@ export const deleteUser = async (req, res) => {
     const userId = req.params.id;
 
     if (!userId || String(userId).length < 24) {
-        return res.status(404).json({
+        return await res.status(404).json({
             status: false,
             message: "Please search user with valid user id.",
         });
@@ -109,7 +109,7 @@ export const deleteUser = async (req, res) => {
     const user = await User.findById(userId).select("-__v");
 
     if (userId && (user === null || undefined || 0)) {
-        return res.status(404).json({
+        return await res.status(404).json({
             status: false,
             message: `User did not found with ${userId} id.`,
         });
@@ -118,7 +118,7 @@ export const deleteUser = async (req, res) => {
     const deletedUser = await User.deleteOne({ _id: userId });
 
     if (deletedUser.acknowledged) {
-        return res.status(200).json({
+        return await res.status(200).json({
             status: true,
             data: deletedUser,
             message: "User has been deleted successfully.",
@@ -141,7 +141,7 @@ export const updateUser = async (req, res) => {
     let userId = req.params.id;
 
     if (!userId || String(userId).length < 24) {
-        return res.status(404).json({
+        return await res.status(404).json({
             status: false,
             message: "Please search user with valid user id.",
         });
@@ -150,7 +150,7 @@ export const updateUser = async (req, res) => {
     const user = await User.findById(userId);
 
     if (userId && (user === null || undefined || 0)) {
-        return res.status(404).json({
+        return await res.status(404).json({
             status: false,
             message: `User did not found with ${userId} id.`,
         });
@@ -173,7 +173,7 @@ export const updateUser = async (req, res) => {
 
         console.log("Updated User --> ", updatedUser);
 
-        return res.status(200).json({
+        return await res.status(200).json({
             status: true,
             data: updatedUser,
             message: "User has been updated successfully.",

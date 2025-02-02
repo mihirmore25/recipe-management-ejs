@@ -3,7 +3,10 @@ import { Recipe } from "../models/Recipe.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import fs from "fs";
-import { uploadOnCloudinary } from "../utils/cloudinary.js";
+import {
+    uploadOnCloudinary,
+    deleteFromCloudinary,
+} from "../utils/cloudinary.js";
 import { Redis } from "ioredis";
 
 const client = new Redis();
@@ -96,7 +99,10 @@ export const createRecipe = async (req, res) => {
         }
 
         const newRecipe = await Recipe.create({
-            recipeImage: recipeImage.url || "",
+            recipeImage: {
+                publicId: recipeImage.public_id,
+                imageUrl: recipeImage.url || "",
+            },
             title,
             description,
             totalTime,
@@ -333,11 +339,20 @@ export const updateRecipe = async (req, res) => {
             );
         }
 
+        const deleteImageFromCloudinary = await deleteFromCloudinary(
+            recipe.recipeImage.publicId
+        );
+        console.log(deleteImageFromCloudinary);
+        
+
         const updatedRecipe = await Recipe.findOneAndUpdate(
             { _id: recipeId },
             {
                 $set: {
-                    recipeImage: recipeImage.url || recipe.recipeImage || null,
+                    recipeImage: {
+                        publicId: recipeImage.public_id || null,
+                        imageUrl: recipeImage.url || recipe.recipeImage || null,
+                    },
                     title,
                     description,
                     totalTime,
@@ -378,7 +393,9 @@ export const getUserRecipes = async (req, res) => {
 
     const recipes = await Recipe.find({ user: userId }).sort({ createdAt: -1 });
 
-    return await res.status(200).render("userRecipes", { recipes, username, user });
+    return await res
+        .status(200)
+        .render("userRecipes", { recipes, username, user });
 };
 
 export const likeRecipe = async (req, res) => {
@@ -420,7 +437,7 @@ export const likeRecipe = async (req, res) => {
                 // },
                 $inc: {
                     likes: 1,
-                }
+                },
             }
         );
         console.log("After ", updateLikeCount);
