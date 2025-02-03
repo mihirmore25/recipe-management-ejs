@@ -140,7 +140,7 @@ export const getRecipes = async (req, res) => {
         // Calculate total pages
         const totalPages = Math.ceil(totalRecipes / limit);
 
-        let recipes = await client.get("recipes");
+        let recipes = await client.getex("recipes", "PX", 600);
         if (recipes) {
             recipes = JSON.parse(recipes);
             return await res.status(200).render("recipes", {
@@ -163,7 +163,7 @@ export const getRecipes = async (req, res) => {
 
         const user = req.user;
 
-        await client.setex("recipes", 240, JSON.stringify(recipes, null, 4));
+        await client.setex("recipes", 5, JSON.stringify(recipes, null, 4));
 
         return await res.status(200).render("recipes", {
             recipes,
@@ -263,6 +263,11 @@ export const deleteRecipe = async (req, res) => {
     ) {
         const deletedRecipe = await Recipe.deleteOne({ _id: recipeId });
 
+        const deleteImageFromCloudinary = await deleteFromCloudinary(
+            recipe.recipeImage.publicId
+        );
+        console.log(deleteImageFromCloudinary);
+
         console.log("Deleted Recipe --> ", deletedRecipe);
 
         await req.flash("success_msg", "Recipe deleted successfully!");
@@ -343,7 +348,6 @@ export const updateRecipe = async (req, res) => {
             recipe.recipeImage.publicId
         );
         console.log(deleteImageFromCloudinary);
-        
 
         const updatedRecipe = await Recipe.findOneAndUpdate(
             { _id: recipeId },
