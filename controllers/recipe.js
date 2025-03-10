@@ -331,32 +331,39 @@ export const updateRecipe = async (req, res) => {
         req.user._id.toString() == recipe.user.toString() ||
         req.user.role == "admin"
     ) {
-        const recipeImageLocalPath = req.file?.path || undefined;
-        console.log("Recipe Image local path ", recipeImageLocalPath);
 
-        const recipeImage = await uploadOnCloudinary(recipeImageLocalPath);
-        console.log("Recipe Image URL ", recipeImage.url);
-
-        if (recipeImage.url) {
-            fs.unlinkSync(recipeImageLocalPath);
-            console.log(
-                "Image removed from local server and uploaded to remote successfully.."
+        if (req.file?.path || req.file) {
+            const recipeImageLocalPath = req.file?.path || undefined;
+            console.log("Recipe Image local path ", recipeImageLocalPath);
+    
+            const recipeImage = await uploadOnCloudinary(recipeImageLocalPath);
+            console.log("Recipe Image URL ", recipeImage.url);
+    
+            if (recipeImage.url) {
+                fs.unlinkSync(recipeImageLocalPath);
+                console.log(
+                    "Image removed from local server and uploaded to remote successfully.."
+                );
+            }
+    
+            const deleteImageFromCloudinary = await deleteFromCloudinary(
+                recipe.recipeImage.publicId
             );
-        }
-
-        const deleteImageFromCloudinary = await deleteFromCloudinary(
-            recipe.recipeImage.publicId
-        );
-        console.log(deleteImageFromCloudinary);
+            console.log(deleteImageFromCloudinary);
+    
+            // Update recipeImage only if new image is provided
+            recipe.recipeImage = {
+                publicId:
+                    recipeImage.public_id || recipe.recipeImage.publicId,
+                imageUrl: recipeImage.url || recipe.recipeImage.imageUrl,
+            };
+        } 
 
         const updatedRecipe = await Recipe.findOneAndUpdate(
             { _id: recipeId },
             {
                 $set: {
-                    recipeImage: {
-                        publicId: recipeImage.public_id || null,
-                        imageUrl: recipeImage.url || recipe.recipeImage || null,
-                    },
+                    recipeImage: recipe.recipeImage,
                     title,
                     description,
                     totalTime,
