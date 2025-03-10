@@ -35,3 +35,22 @@ addInstructionsBtn.addEventListener("click", function () {
     instructionList.appendChild(newInstructions);
     console.log("Instructions Button Clicked");
 });
+
+// Preview new image after uploading new image while updating recipe image
+document
+    .getElementById("recipeImage")
+    .addEventListener("change", function (event) {
+        const file = event.target.files[0];
+        console.log(file);
+
+        if (file) {
+            // Update image preview
+            const previewImage = document.getElementById("preview-img");
+            console.log(previewImage);
+            
+            previewImage.src = URL.createObjectURL(file);
+            console.log(previewImage.src);
+            
+            previewImage.onload = () => URL.revokeObjectURL(previewImage.src); // Free memory
+        }
+    });
