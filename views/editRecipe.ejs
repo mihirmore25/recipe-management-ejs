@@ -9,7 +9,18 @@
             <%= error_msg %>
         </h3>
         <h2>Update Recipe</h2>
-        <input type="file" name="recipeImage" placeholder="image" value="<%= recipe.recipeImage %>" />
+        <img
+            class="imageUpdate"
+            src="<%= recipe.recipeImage.imageUrl %>"
+            alt="<%= recipe.title %>"
+        />
+        <input
+            style="margin-top: 20px"
+            type="file"
+            name="recipeImage"
+            placeholder="image"
+            value="<%= recipe.recipeImage %>"
+        />
         <input
             type="text"
             name="title"
