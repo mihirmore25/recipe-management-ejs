@@ -47,10 +47,22 @@ document
             // Update image preview
             const previewImage = document.getElementById("preview-img");
             console.log(previewImage);
-            
+
             previewImage.src = URL.createObjectURL(file);
             console.log(previewImage.src);
-            
+
             previewImage.onload = () => URL.revokeObjectURL(previewImage.src); // Free memory
         }
     });
+
+document.addEventListener("DOMContentLoaded", function () {
+    const navbar = document.querySelector(".navbar");
+
+    window.addEventListener("scroll", function () {
+        if (window.scrollY > 50) {
+            navbar.classList.add("fixed"); // Make it fixed & transparent
+        } else {
+            navbar.classList.remove("fixed"); // Make it normal
+        }
+    });
+});

@@ -1,5 +1,6 @@
 <%- include("./partials/header", {title: `${username}'s recipes`}); %>
-<h2><%= username %>'s Recipes</h2>
+<%- include("./navbar", {user: user})%>
+<h2 class="heading2"><%= username %>'s Recipes</h2>
 <div class="recipes">
     <% recipes.forEach(recipe => { %>
     <div class="recipeCard">
@@ -17,7 +18,15 @@
         <p><%= recipe.description %></p>
         <% } %>
         <span>@ <%= user.username %></span>
-        <a href="/recipes/<%= recipe._id %>" class="viewBtn">View</a>
+        <div class="viewsLikes">
+            <div>
+                <a href="/recipes/<%= recipe._id %>">View</a>
+            </div>
+            <div>
+                <p><span><%= recipe.views %></span> views</p>
+                <p><span><%= recipe.likes %></span> likes</p>
+            </div>
+        </div>
     </div>
     <% }) %>
 </div>

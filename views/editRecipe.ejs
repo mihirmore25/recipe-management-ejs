@@ -1,4 +1,5 @@
-<%- include("./partials/header", {title: "Create Recipe"}) %>
+<%- include("./partials/header", {title: "Create Recipe"}) %> 
+<%- include("./navbar", {user: user}) %>
 <div class="form">
     <form
         action="/recipes/<%= recipe._id %>"

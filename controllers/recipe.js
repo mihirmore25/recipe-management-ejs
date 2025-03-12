@@ -20,7 +20,8 @@ client.on("error", (error) => {
 });
 
 export const getCreateRecipe = async (req, res) => {
-    return await res.status(200).render("createRecipe");
+    const user = await User.findById(req.user._id);
+    return await res.status(200).render("createRecipe", { user });
 };
 
 export const createRecipe = async (req, res) => {
@@ -161,12 +162,16 @@ export const getRecipes = async (req, res) => {
             .skip(skip)
             .limit(limit);
 
-        const user = req.user;
+        // const user = req.user;
+        // console.log(user);
+        const user = await User.findById(req.user._id);
+        console.log(user);
 
         await client.setex("recipes", 5, JSON.stringify(recipes, null, 4));
 
         return await res.status(200).render("recipes", {
             recipes,
+            user,
             currentPage: page,
             totalPages,
             totalRecipes,
@@ -287,13 +292,14 @@ export const getUpdateRecipe = async (req, res) => {
     }
 
     const recipe = await Recipe.findById(recipeId);
+    const user = await User.findById(req.user._id);
 
     if (recipeId && (recipe === null || undefined || 0)) {
         req.flash("error_msg", "Recipe did not found!");
         return await res.redirect("/recipes");
     }
 
-    return await res.status(200).render("editRecipe", { recipe });
+    return await res.status(200).render("editRecipe", { recipe, user });
 };
 
 export const updateRecipe = async (req, res) => {
@@ -331,33 +337,31 @@ export const updateRecipe = async (req, res) => {
         req.user._id.toString() == recipe.user.toString() ||
         req.user.role == "admin"
     ) {
-
         if (req.file?.path || req.file) {
             const recipeImageLocalPath = req.file?.path || undefined;
             console.log("Recipe Image local path ", recipeImageLocalPath);
-    
+
             const recipeImage = await uploadOnCloudinary(recipeImageLocalPath);
             console.log("Recipe Image URL ", recipeImage.url);
-    
+
             if (recipeImage.url) {
                 fs.unlinkSync(recipeImageLocalPath);
                 console.log(
                     "Image removed from local server and uploaded to remote successfully.."
                 );
             }
-    
+
             const deleteImageFromCloudinary = await deleteFromCloudinary(
                 recipe.recipeImage.publicId
             );
             console.log(deleteImageFromCloudinary);
-    
+
             // Update recipeImage only if new image is provided
             recipe.recipeImage = {
-                publicId:
-                    recipeImage.public_id || recipe.recipeImage.publicId,
+                publicId: recipeImage.public_id || recipe.recipeImage.publicId,
                 imageUrl: recipeImage.url || recipe.recipeImage.imageUrl,
             };
-        } 
+        }
 
         const updatedRecipe = await Recipe.findOneAndUpdate(
             { _id: recipeId },

@@ -1,4 +1,5 @@
 <%- include("./partials/header", {title: "Create Recipe"}) %>
+<%- include("./navbar", {user: user}) %>
 <div class="form">
     <form
         action="/recipes/createRecipe"
@@ -9,7 +10,14 @@
             <%= error_msg %>
         </h3>
         <h2>Create Recipe</h2>
-        <input type="file" name="recipeImage" placeholder="image" />
+        <img id="preview-img" class="imageUpdate" />
+        <input
+            type="file"
+            name="recipeImage"
+            placeholder="image"
+            id="recipeImage"
+            style="margin-top: 20px"
+        />
         <input type="text" name="title" placeholder="title" />
         <textarea
             type="text"
@@ -18,6 +26,8 @@
             minlength="10"
             maxlength="200"
             class="description"
+            aria-valuemin="10"
+            aria-valuemax="200"
         ></textarea>
         <input type="text" name="totalTime" placeholder="total time" />
         <input type="text" name="prepTime" placeholder="preparation time" />

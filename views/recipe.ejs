@@ -1,4 +1,5 @@
-<%- include("./partials/header", {title: recipe.title }); %>
+<%- include("./partials/header", {title: recipe.title }); %> 
+<%- include("./navbar", {user: user}) %>
 <div class="wrapper">
     <div class="card">
         <div class="image">
@@ -88,22 +89,20 @@
                 </div>
             </div>
             <div class="recipeBtns">
-                <a href="/recipes">Back to Recipes</a>
+                <a href="/recipes"><i class="ri-arrow-left-long-fill" style="font-size: larger;"></i></a>
                 <% if ((user._id.toString() == recipe.user._id.toString()) ||
                 user.role == "admin") { %>
                 <a
                     href="/recipes/<%= recipe._id %>/deleteRecipe"
                     class="deleteBtn"
-                    >Delete Recipe</a
-                >
+                    ><i class="ri-delete-bin-6-line" style="font-size: larger;"></i></a>
                 <a
                     href="/recipes/<%= recipe._id %>/getUpdateRecipe"
                     class="deleteBtn"
-                    >Update Recipe</a
-                >
+                    ><i class="ri-edit-box-line" style="font-size: larger;"></i></a>
                 <% } %>
                 <form action="/recipes/<%= recipe._id %>/like" method="POST">
-                    <button class="likeBtn" type="submit">Like</button>
+                    <button class="likeBtn" type="submit"><i class="ri-thumb-up-line" style="font-size: larger;"></i></button>
                 </form>
             </div>
             <div class="views">

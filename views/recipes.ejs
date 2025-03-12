@@ -1,14 +1,28 @@
 <%- include("./partials/header", {title: "Recipes"}); %>
-<h2>Recipes</h2>
-<h3 id="errorMsg" style="color: #8b0000; margin-top: 20px; margin-bottom: 20px;"><%= error_msg %></h3>
-<h3 id="successMsg" style="color: green; margin-top: 20px; margin-bottom: 20px;">
+<!-- <nav class="navbar fixed">
+    <a class="logo" href="/recipes">Recipe App</a>
+    <div class="dropdown">
+        <button class="dropbtn">
+            <i class="ri-account-circle-line" style="font-size: 30px;"></i> <%= user.username %>
+        </button>
+        <div class="dropdown-content">
+            <a href="/users/<%= user._id %>">Profile</a>
+            <a href="/logout">Logout</a>
+        </div>
+    </div>
+</nav> -->
+<%- include("./navbar", {user: user})%>
+<h3 id="errorMsg" style="color: #8b0000; margin-top: 20px; margin-bottom: 20px">
+    <%= error_msg %>
+</h3>
+<h3 id="successMsg" style="color: green; margin-top: 20px; margin-bottom: 20px">
     <%= success_msg %>
 </h3>
 <% if (recipes.length > 0) { %>
 <div class="recipes">
     <% recipes.forEach(recipe => { %>
     <div class="recipeCard">
-        <div class="single_recipe_image" style="background-color: antiquewhite">
+        <div class="single_recipe_image">
             <img
                 class="single_recipe_image"
                 src="<%= recipe.recipeImage.imageUrl %>"
@@ -24,12 +38,21 @@
         <a href="/users/<%= recipe.user._id %>" class="usernameLink">
             @ <%= recipe.user.username %>
         </a>
-        <a href="/recipes/<%= recipe._id %>" class="viewBtn">View</a>
+        <div class="viewsLikes">
+            <div>
+                <a href="/recipes/<%= recipe._id %>">View</a>
+            </div>
+            <div>
+                <p><span><%= recipe.views %></span> views</p>
+                <p><span><%= recipe.likes %></span> likes</p>
+            </div>
+        </div>
     </div>
     <% }) %>
 </div>
 <a href="/recipes/getCreateRecipe">Create Recipe</a>
-<a href="/logout">Logout</a>
+<!-- <a href="/logout">Logout</a> -->
+
 <!-- Pagination Controls -->
 <div class="pagination">
     <% if (currentPage > 1) { %>

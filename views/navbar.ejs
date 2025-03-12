@@ -1,0 +1,15 @@
+<%- include("./partials/header", {title: "Navbar"}); %>
+<nav class="navbar fixed">
+    <a class="logo" href="/recipes">Recipe App</a>
+    <div class="dropdown">
+        <button class="dropbtn">
+            <i class="ri-account-circle-line" style="font-size: 30px"></i> 
+            <%= user.username %>
+        </button>
+        <div class="dropdown-content">
+            <a href="/users/<%= user._id %>">Profile</a>
+            <a href="/logout">Logout</a>
+        </div>
+    </div>
+</nav>
+<%- include("./partials/footer") %>
