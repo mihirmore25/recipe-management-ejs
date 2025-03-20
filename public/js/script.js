@@ -1,47 +1,53 @@
-const successMessage = document.getElementById("successMsg");
-console.log(successMessage);
-setTimeout(() => {
-    successMessage.style.display = "none";
-    successMessage.remove();
-}, 3000);
+console.log("Script is loaded successfully...");
 
-const errorMessage = document.getElementById("errorMsg");
-console.log(errorMessage);
+window.onload = function () {
+    const successMessage = document.getElementById("successMsg");
+    console.log(successMessage);
+    setTimeout(() => {
+        successMessage.style.display = "none";
+        successMessage.remove();
+    }, 3000);
 
-setTimeout(() => {
-    errorMessage.style.display = "none";
-    errorMessage.remove();
-}, 3000);
+    const errorMessage = document.getElementById("errorMsg");
+    console.log(errorMessage);
 
-let addIngredientsBtn = document.getElementById("addIngredientsBtn");
-let addInstructionsBtn = document.getElementById("addInstructionsBtn");
-let instructionList = document.querySelector(".instructionList");
-let ingredientList = document.querySelector(".ingredientList");
-let ingredientDiv = document.querySelectorAll(".ingredientDiv")[0];
-let instructionDiv = document.querySelectorAll(".instructionDiv")[0];
+    setTimeout(() => {
+        errorMessage.style.display = "none";
+        errorMessage.remove();
+    }, 3000);
 
-addIngredientsBtn.addEventListener("click", function () {
-    let newIngredients = ingredientDiv.cloneNode(true);
-    let input = newIngredients.getElementsByTagName("input")[0];
-    input.value = "";
-    ingredientList.appendChild(newIngredients);
-    console.log("Ingredients Button Clicked");
-});
+    let addIngredientsBtn = document.getElementById("addIngredientsBtn");
+    let addInstructionsBtn = document.getElementById("addInstructionsBtn");
+    let instructionList = document.querySelector(".instructionList");
+    let ingredientList = document.querySelector(".ingredientList");
+    let ingredientDiv = document.querySelectorAll(".ingredientDiv")[0];
+    let instructionDiv = document.querySelectorAll(".instructionDiv")[0];
 
-addInstructionsBtn.addEventListener("click", function () {
-    let newInstructions = instructionDiv.cloneNode(true);
-    let input = newInstructions.getElementsByTagName("input")[0];
-    input.value = "";
-    instructionList.appendChild(newInstructions);
-    console.log("Instructions Button Clicked");
-});
+    addIngredientsBtn.addEventListener("click", function () {
+        let newIngredients = ingredientDiv.cloneNode(true);
+        let input = newIngredients.getElementsByTagName("input")[0];
+        input.value = "";
+        ingredientList.appendChild(newIngredients);
+        console.log("Ingredients Button Clicked");
+    });
 
-// Preview new image after uploading new image while updating recipe image
-document
-    .getElementById("recipeImage")
-    .addEventListener("change", function (event) {
+    addInstructionsBtn.addEventListener("click", function () {
+        let newInstructions = instructionDiv.cloneNode(true);
+        let input = newInstructions.getElementsByTagName("input")[0];
+        input.value = "";
+        instructionList.appendChild(newInstructions);
+        console.log("Instructions Button Clicked");
+    });
+
+    // Preview new image after uploading new image while updating recipe image
+    const recipeImage = document.getElementById("recipeImage");
+    console.log(recipeImage);
+
+    recipeImage.addEventListener("change", function (event) {
+        console.log(event.target.files);
+
         const file = event.target.files[0];
-        console.log(file);
+        console.log(`Image File ----> `, file);
 
         if (file) {
             // Update image preview
@@ -55,14 +61,15 @@ document
         }
     });
 
-document.addEventListener("DOMContentLoaded", function () {
-    const navbar = document.querySelector(".navbar");
+    document.addEventListener("DOMContentLoaded", function () {
+        const navbar = document.querySelector(".navbar");
 
-    window.addEventListener("scroll", function () {
-        if (window.scrollY > 50) {
-            navbar.classList.add("fixed"); // Make it fixed & transparent
-        } else {
-            navbar.classList.remove("fixed"); // Make it normal
-        }
+        window.addEventListener("scroll", function () {
+            if (window.scrollY > 50) {
+                navbar.classList.add("fixed"); // Make it fixed & transparent
+            } else {
+                navbar.classList.remove("fixed"); // Make it normal
+            }
+        });
     });
-});
+};
