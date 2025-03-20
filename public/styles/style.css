@@ -279,7 +279,8 @@ h2 {
     width: 400px;
 }
 
-.registerLogin > button, .registerLogin > a {
+.registerLogin > button,
+.registerLogin > a {
     border-radius: 25px;
     width: 190px;
 }
@@ -423,7 +424,7 @@ button {
 }
 
 /* Navbar styling */
-.logo{
+.logo {
     background-color: none;
     border: none;
     font-weight: 500;
@@ -432,7 +433,7 @@ button {
 }
 
 .navbar {
-    position: fixed;  /* Fix navbar at the top */
+    position: fixed; /* Fix navbar at the top */
     top: 0;
     left: 0;
     z-index: 10;
@@ -475,7 +476,6 @@ body {
     align-items: center;
     gap: 10px;
 }
-
 
 .dropbtn:hover {
     color: hsl(332, 51%, 32%);
@@ -656,7 +656,7 @@ body {
 
 .recipeBtns {
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: center;
 }
 
@@ -696,6 +696,27 @@ body {
     background-color: hsl(30, 10%, 34%);
 }
 
+.deleteBtn:hover {
+    background-color: hsl(0, 79%, 51%);
+    transition: filter 0.4s ease-in;
+}
+
+.updateBtn {
+    font-family: "Outfit", sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    margin-left: 10px;
+    background-color: hsl(30, 10%, 34%);
+}
+
+.updateBtn:hover {
+    background-color: hsl(205, 91%, 50%);
+    transition: filter 0.4s ease-in;
+}
+
 .likeBtn {
     font-family: "Outfit", sans-serif;
     font-size: 16px;
@@ -705,6 +726,11 @@ body {
     color: white;
     margin-left: 10px;
     background-color: hsl(332, 51%, 32%);
+}
+
+.likeBtn:hover {
+    background-color: hsl(346, 93%, 57%);
+    transition: filter 0.4 ease-in;
 }
 
 .usernameLink {

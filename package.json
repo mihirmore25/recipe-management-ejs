@@ -7,7 +7,8 @@
     "scripts": {
         "dev": "dotenvx run -f .env.development -- nodemon server.js",
         "dev:env:encrypt": "dotenvx encrypt -f .env.development",
-        "dev:env:decrypt": "dotenvx decrypt -f .env.development"
+        "dev:env:decrypt": "dotenvx decrypt -f .env.development",
+        "vercel-build": "npm install"
     },
     "keywords": [],
     "author": "",
