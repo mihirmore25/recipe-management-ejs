@@ -13,6 +13,8 @@ import { User } from "./models/User.js";
 // import cron from "node-cron";
 import { removeGuestUserEveryThrityMinutes } from "./middleware/removeGuestUser.js";
 import passport from "./config/passport.js";
+import { RedisStore } from "connect-redis";
+import { client } from "./controllers/recipe.js";
 const app = express();
 
 // DB connection
@@ -47,9 +49,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(
     session({
+        store: new RedisStore({ client }),
         secret: process.env.EXPRESS_SESSION_SECRET,
         resave: false,
         saveUninitialized: true,
+        cookie: { secure: "auto" },
     })
 );
 
