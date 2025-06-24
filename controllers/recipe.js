@@ -9,7 +9,7 @@ import {
 } from "../utils/cloudinary.js";
 import { Redis } from "ioredis";
 
-export const client = new Redis(process.env.UPSTASH_REDIS_URL);
+export const client = new Redis();
 
 client.on("connect", () => {
     console.log(`Connected to Redis successfully...`);
