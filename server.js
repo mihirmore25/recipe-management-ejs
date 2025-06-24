@@ -1,3 +1,4 @@
+import '@dotenvx/dotenvx/config.js'; // Load environment variables securely
 import express from "express";
 import helmet from "helmet";
 import cors from "cors";
@@ -103,3 +104,5 @@ app.use(removeGuestUserEveryThrityMinutes);
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}...`);
 });
+
+export default app;
