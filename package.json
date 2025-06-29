@@ -5,10 +5,10 @@
     "main": "index.js",
     "type": "module",
     "scripts": {
+        "start": "dotenvx run -f .env.development -- nodemon server.js",
         "dev": "dotenvx run -f .env.development -- nodemon server.js",
         "dev:env:encrypt": "dotenvx encrypt -f .env.development",
-        "dev:env:decrypt": "dotenvx decrypt -f .env.development",
-        "vercel-build": "npm install"
+        "dev:env:decrypt": "dotenvx decrypt -f .env.development"
     },
     "keywords": [],
     "author": "",
