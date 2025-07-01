@@ -9,7 +9,13 @@ import {
 } from "../utils/cloudinary.js";
 import { Redis } from "ioredis";
 
-export const client = new Redis(process.env.UPSTASH_REDIS_URL);
+let client;
+
+if (process.env.NODE_ENV === "production") {
+    client = new Redis(process.env.UPSTASH_REDIS_URL);
+} else {
+    client = new Redis();
+}
 
 client.on("connect", () => {
     console.log(`Connected to Redis successfully...`);
