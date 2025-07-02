@@ -477,3 +477,5 @@ export const likeRecipe = async (req, res) => {
 
     return await res.status(200).redirect(`/recipes/${recipeId}`);
 };
+
+export { client };
