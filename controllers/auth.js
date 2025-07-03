@@ -46,7 +46,7 @@ export const register = async (req, res) => {
 
     const { role, ...user_data } = savedUser._doc;
 
-    console.log("User Data ---> ", user_data);
+    // console.log("User Data ---> ", user_data);
 
     req.flash("success_msg", "You have registered successfully! Please login.");
     return await res.status(201).redirect("/login");
@@ -102,7 +102,7 @@ export const loginAsGuest = async (req, res) => {
             role: "guest", // Assign the guest role
         });
 
-        console.log(guestUser);
+        // console.log(guestUser);
 
         // Save the guest user in the database
         await guestUser.save();
@@ -119,7 +119,7 @@ export const loginAsGuest = async (req, res) => {
             .status(200)
             .redirect("/recipes"); // Redirect to the recipes page
     } catch (error) {
-        console.error("Error during guest login:", error);
+        // console.error("Error during guest login:", error);
         req.flash("error_msg", "Unable to login as guest. Please try again!");
         return await res.redirect("/login");
     }
@@ -166,7 +166,7 @@ export const forgotPassword = async (req, res) => {
         }
 
         const user = await User.findOne({ email });
-        console.log(user.email);
+        // console.log(user.email);
 
         if (!user) {
             req.flash("error_msg", "User not found, with this email id!");
@@ -178,10 +178,10 @@ export const forgotPassword = async (req, res) => {
         user.resetPasswordExpires = Date.now() + 3600000; // 1 hour
 
         await user.save();
-        console.log("After", user);
+        // console.log("After", user);
 
         sendResetPasswordEmail(user.email, token).then(async (response) => {
-            console.log(response.response);
+            // console.log(response.response);
             req.flash("success_msg", "Forgot Password Mail Sent Successfully!");
             return await res.status(200).render("forgotPassword");
         });
@@ -244,7 +244,7 @@ export const postResetPassword = async (req, res) => {
         }
     );
 
-    console.log(updateUserPassword);
+    // console.log(updateUserPassword);
 
     let newToken = user.generateJWT();
     return await res

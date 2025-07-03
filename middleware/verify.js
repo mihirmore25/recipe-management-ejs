@@ -10,7 +10,7 @@ export const verify = async (req, res, next) => {
         token = req.cookies.access_token;
     }
 
-    console.log("Token --> ", token);
+    // console.log("Token --> ", token);
 
     if (!token) {
         req.flash(

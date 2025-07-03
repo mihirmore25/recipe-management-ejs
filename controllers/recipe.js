@@ -35,7 +35,7 @@ export const createRecipe = async (req, res) => {
 
     token = req.cookies.access_token;
 
-    console.log("Token --> ", token);
+    // console.log("Token --> ", token);
 
     if (!token) {
         req.flash(
@@ -59,7 +59,7 @@ export const createRecipe = async (req, res) => {
         fat,
     } = req.body;
 
-    console.log("Req Body --> ", req.body);
+    // console.log("Req Body --> ", req.body);
 
     if (
         !title ||
@@ -86,7 +86,7 @@ export const createRecipe = async (req, res) => {
 
         // console.log(req.file.path);
         const recipeImageLocalPath = req.file?.path || undefined;
-        console.log("Recipe Image Local Path ---> ", recipeImageLocalPath);
+        // console.log("Recipe Image Local Path ---> ", recipeImageLocalPath);
         if (!recipeImageLocalPath || undefined) {
             req.flash("error_msg", "Please upload your recipe image!");
             return await res.redirect("/recipes/getCreateRecipe");
@@ -126,7 +126,7 @@ export const createRecipe = async (req, res) => {
 
         const newCreatedRecipe = await newRecipe.save();
 
-        console.log(newCreatedRecipe._doc);
+        // console.log(newCreatedRecipe._doc);
 
         return await res.status(200).redirect("/recipes");
     });
@@ -171,7 +171,7 @@ export const getRecipes = async (req, res) => {
         // const user = req.user;
         // console.log(user);
         const user = await User.findById(req.user._id);
-        console.log(user);
+        // console.log(user);
 
         await client.setex("recipes", 5, JSON.stringify(recipes, null, 4));
 
@@ -233,7 +233,7 @@ export const getRecipe = async (req, res) => {
                 },
             }
         );
-        console.log("After ", updateViewCount);
+        // console.log("After ", updateViewCount);
 
         // Add the post to the user's viewedRecipes array
         let updateViewedRecipes = await User.updateOne(
@@ -244,7 +244,7 @@ export const getRecipe = async (req, res) => {
                 },
             }
         );
-        console.log("After ", user);
+        // console.log("After ", user);
     }
     return await res.status(200).render("recipe", { recipe, user });
 };
@@ -261,7 +261,7 @@ export const deleteRecipe = async (req, res) => {
 
     const recipe = await Recipe.findById(recipeId);
 
-    console.log("User --> ", req.user);
+    // console.log("User --> ", req.user);
 
     if (recipeId && (recipe === null || undefined || 0)) {
         req.flash("error_msg", "Recipe did not found!");
@@ -277,9 +277,9 @@ export const deleteRecipe = async (req, res) => {
         const deleteImageFromCloudinary = await deleteFromCloudinary(
             recipe.recipeImage.publicId
         );
-        console.log(deleteImageFromCloudinary);
+        // console.log(deleteImageFromCloudinary);
 
-        console.log("Deleted Recipe --> ", deletedRecipe);
+        // console.log("Deleted Recipe --> ", deletedRecipe);
 
         await req.flash("success_msg", "Recipe deleted successfully!");
         return await res.status(200).redirect("/recipes");
@@ -337,7 +337,7 @@ export const updateRecipe = async (req, res) => {
         return await res.redirect("/recipes");
     }
 
-    console.log("User --> ", req.user);
+    // console.log("User --> ", req.user);
 
     if (
         req.user._id.toString() == recipe.user.toString() ||
@@ -345,10 +345,10 @@ export const updateRecipe = async (req, res) => {
     ) {
         if (req.file?.path || req.file) {
             const recipeImageLocalPath = req.file?.path || undefined;
-            console.log("Recipe Image local path ", recipeImageLocalPath);
+            // console.log("Recipe Image local path ", recipeImageLocalPath);
 
             const recipeImage = await uploadOnCloudinary(recipeImageLocalPath);
-            console.log("Recipe Image URL ", recipeImage.url);
+            // console.log("Recipe Image URL ", recipeImage.url);
 
             if (recipeImage.url) {
                 fs.unlinkSync(recipeImageLocalPath);
@@ -360,7 +360,7 @@ export const updateRecipe = async (req, res) => {
             const deleteImageFromCloudinary = await deleteFromCloudinary(
                 recipe.recipeImage.publicId
             );
-            console.log(deleteImageFromCloudinary);
+            // console.log(deleteImageFromCloudinary);
 
             // Update recipeImage only if new image is provided
             recipe.recipeImage = {
@@ -390,7 +390,7 @@ export const updateRecipe = async (req, res) => {
             { new: true }
         ).select("-__v");
 
-        console.log("Updated Recipe --> ", updatedRecipe);
+        // console.log("Updated Recipe --> ", updatedRecipe);
 
         // return res.status(200).json({
         //     status: true,
@@ -461,7 +461,7 @@ export const likeRecipe = async (req, res) => {
                 },
             }
         );
-        console.log("After ", updateLikeCount);
+        // console.log("After ", updateLikeCount);
 
         // Add the like to the user's likedRecipes array
         let updateLikedRecipes = await User.updateOne(
@@ -472,7 +472,7 @@ export const likeRecipe = async (req, res) => {
                 },
             }
         );
-        console.log("After ", user);
+        // console.log("After ", user);
     }
 
     return await res.status(200).redirect(`/recipes/${recipeId}`);

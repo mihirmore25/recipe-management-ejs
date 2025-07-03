@@ -28,7 +28,7 @@ export const createUser = async (req, res) => {
 
     const userExist = await User.findOne({ email });
 
-    console.log("User Exist --> ", userExist);
+    // console.log("User Exist --> ", userExist);
 
     if (userExist) {
         return await res.status(400).json({
@@ -44,7 +44,7 @@ export const createUser = async (req, res) => {
 
     // const { password, ...user_data } = savedUser._doc;
 
-    console.log("User Data ---> ", savedUser);
+    // console.log("User Data ---> ", savedUser);
 
     return await res.status(201).json({
         status: true,
@@ -56,7 +56,7 @@ export const createUser = async (req, res) => {
 export const getAllUsers = async (req, res) => {
     const users = await User.find().select("-__v +password");
 
-    console.log(users, users.length);
+    // console.log(users, users.length);
 
     if (users.length === 0) {
         return await res.status(404).json({
@@ -156,7 +156,7 @@ export const updateUser = async (req, res) => {
         });
     }
 
-    console.log("User --> ", req.user);
+    // console.log("User --> ", req.user);
 
     if (
         req.user._id.toString() == user._id.toString() ||
@@ -171,7 +171,7 @@ export const updateUser = async (req, res) => {
             { new: true }
         ).select("-__v");
 
-        console.log("Updated User --> ", updatedUser);
+        // console.log("Updated User --> ", updatedUser);
 
         return await res.status(200).json({
             status: true,

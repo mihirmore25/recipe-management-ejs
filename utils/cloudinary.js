@@ -15,7 +15,7 @@ const uploadOnCloudinary = async (localFilePath) => {
             resource_type: "auto",
         });
         // file has been uploaded successfully
-        console.log("file is uploaded on cloudinary ", response.url);
+        // console.log("file is uploaded on cloudinary ", response.url);
         return response;
     } catch (error) {
         fs.unlinkSync(localFilePath); // remove the
@@ -33,7 +33,7 @@ const deleteFromCloudinary = async (publicId) => {
             resource_type: "image",
         });
         // file has been deleted successfully
-        console.log("file is deleted from cloudinary ---> ", response);
+        // console.log("file is deleted from cloudinary ---> ", response);
         return response;
     } catch (error) {
         console.error(error);
