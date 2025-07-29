@@ -182,6 +182,8 @@ export const forgotPassword = async (req, res) => {
 
         sendResetPasswordEmail(user.email, token).then(async (response) => {
             // console.log(response.response);
+            console.log(response.data);
+            
             req.flash("success_msg", "Forgot Password Mail Sent Successfully!");
             return await res.status(200).render("forgotPassword");
         });
