@@ -241,7 +241,7 @@ body {
     /* width: 100%; */
 }
 
-.form > form {
+/* .form > form {
     background-color: white;
     border: solid 4px hsl(14, 45%, 36%);
     border-radius: 45px;
@@ -251,6 +251,20 @@ body {
     flex-direction: column;
     height: auto;
     width: 600px;
+} */
+
+.form > form {
+    background-color: white;
+    border: solid 4px hsl(14, 45%, 36%);
+    border-radius: 45px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+    height: auto;
+    width: 100%;
+    max-width: 600px; /* keeps good size on desktops */
+    padding: 20px;
 }
 
 h2 {
@@ -267,7 +281,8 @@ h2 {
     border: 2px solid hsl(14, 45%, 36%);
     border-radius: 25px;
     padding: 15px;
-    width: 400px;
+    width: 100%;
+    max-width: 400px;
     font-size: large;
     margin-bottom: 20px;
 }
@@ -276,7 +291,9 @@ h2 {
     display: flex;
     justify-content: space-between;
     text-align: center;
-    width: 400px;
+    width: 100%;
+    max-width: 400px;
+    gap: 10px;
 }
 
 .registerLogin > button,
@@ -348,7 +365,8 @@ h2 {
     border: 1px solid hsl(14, 45%, 36%);
     border-radius: 10px;
     padding: 10px;
-    width: 400px;
+    width: 100%;
+    max-width: 400px;
     color: hsl(330, 100%, 98%);
     background-color: hsl(332, 51%, 32%);
 }
@@ -392,7 +410,8 @@ h2 {
     border-radius: 25px;
     padding: 10px;
     text-decoration: none;
-    width: 400px;
+    width: 100%;
+    max-width: 400px;
     text-align: center;
     color: hsl(330, 100%, 98%);
     background-color: hsl(332, 51%, 32%);
@@ -784,7 +803,40 @@ select > option {
     color: hsl(332, 51%, 32%);
 }
 
+@media only screen and (max-width: 768px) {
+    .registerLogin {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .registerLogin > button,
+    .registerLogin > a {
+        width: 100%;
+    }
+}
+
 @media only screen and (width <= 550px) {
+    .form {
+        margin: 20px;
+    }
+
+    .form > form {
+        border-radius: 25px;
+        padding: 15px;
+    }
+
+    .form > form > input,
+    .form > form > button,
+    .form > form > a,
+    select {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    h2 {
+        font-size: 28px;
+    }
+
     .card {
         margin-top: 0px;
         margin-bottom: 0px;
