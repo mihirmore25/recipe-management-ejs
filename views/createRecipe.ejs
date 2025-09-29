@@ -6,9 +6,11 @@
         method="post"
         enctype="multipart/form-data"
     >
-        <h3 id="errorMsg" style="color: #8b0000; margin-top: 20px">
-            <%= error_msg %>
-        </h3>
+        <% if (error_msg) { %>
+            <h3 id="errorMsg" style="color: #8b0000; margin-top: 20px">
+                <%= error_msg %>
+            </h3>
+        <% } %>
         <h2>Create Recipe</h2>
         <img id="preview-img" class="imageUpdate" />
         <input
