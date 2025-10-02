@@ -16,40 +16,66 @@ export const getRegister = async (req, res) => {
 };
 
 export const register = async (req, res) => {
-    const { username, email, password } = req.body;
-    console.log("Req Body --> ", req.body);
+    try {
+        const { username, email, password } = req.body;
+        console.log("Req Body --> ", req.body);
 
-    if (!username || !email || !password) {
-        req.flash("error_msg", "Username, Email, Password are required");
-        return await res.redirect("/");
-    }
+        if (!username || !email || !password) {
+            req.flash("error_msg", "Username, Email, Password are required");
+            return await res.redirect("/");
+        }
 
-    const newUser = new User({
-        username,
-        email,
-        password,
-    });
+        const newUser = new User({
+            username,
+            email,
+            password,
+        });
 
-    const userExist = await User.findOne({ email });
+        const userExist = await User.findOne({ email });
 
-    console.log("User Exist --> ", userExist);
+        console.log("User Exist --> ", userExist);
 
-    if (userExist) {
+        if (userExist) {
+            req.flash(
+                "error_msg",
+                "You already have an account, please log in instead."
+            );
+            return await res.redirect("/");
+        }
+
+        const savedUser = await newUser.save();
+
+        const { role, ...user_data } = savedUser._doc;
+
+        // console.log("User Data ---> ", user_data);
+
         req.flash(
-            "error_msg",
-            "You already have an account, please log in instead."
+            "success_msg",
+            "You have registered successfully! Please login."
         );
-        return await res.redirect("/");
+        return await res.status(201).redirect("/login");
+    } catch (error) {
+        console.error("Registration Error: ", error);
+
+        // ✅ Handle Mongoose validation errors
+        if (error.name === "ValidationError") {
+            const messages = Object.values(error.errors).map(
+                (val) => val.message
+            );
+            messages.forEach((msg) => req.flash("error_msg", msg));
+            return res.redirect("/");
+        }
+
+        // Handle duplicate email (MongoDB unique index)
+        if (err.code === 11000 && err.keyPattern && err.keyPattern.email) {
+            req.flash("error_msg", "This email is already registered.");
+            return res.redirect("/");
+        }
+
+        // Generic fallback error
+        req.flash("error_msg", "Something went wrong. Please try again.");
+        return res.redirect("/");
     }
-
-    const savedUser = await newUser.save();
-
-    const { role, ...user_data } = savedUser._doc;
-
-    // console.log("User Data ---> ", user_data);
-
-    req.flash("success_msg", "You have registered successfully! Please login.");
-    return await res.status(201).redirect("/login");
 };
 
 export const getLogin = async (req, res) => {
@@ -115,7 +141,8 @@ export const loginAsGuest = async (req, res) => {
         );
 
         // Set the token in a cookie
-        return await res.cookie("access_token", token, { httpOnly: true })
+        return await res
+            .cookie("access_token", token, { httpOnly: true })
             .status(200)
             .redirect("/recipes"); // Redirect to the recipes page
     } catch (error) {
@@ -183,7 +210,7 @@ export const forgotPassword = async (req, res) => {
         sendResetPasswordEmail(user.email, token).then(async (response) => {
             // console.log(response.response);
             console.log(response.data);
-            
+
             req.flash("success_msg", "Forgot Password Mail Sent Successfully!");
             return await res.status(200).render("forgotPassword");
         });

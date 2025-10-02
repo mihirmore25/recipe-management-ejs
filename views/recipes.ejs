@@ -54,7 +54,9 @@
     </div>
     <% }) %>
 </div>
+<% if (user && user.role !== "guest") { %>
 <a href="/recipes/getCreateRecipe">Create Recipe</a>
+<% } %>
 <!-- <a href="/logout">Logout</a> -->
 
 <!-- Pagination Controls -->
