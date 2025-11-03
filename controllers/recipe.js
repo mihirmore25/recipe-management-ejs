@@ -345,7 +345,7 @@ export const updateRecipe = async (req, res) => {
     ) {
         if (req.file?.path || req.file) {
             const recipeImageLocalPath = req.file?.path || undefined;
-            // console.log("Recipe Image local path ", recipeImageLocalPath);
+            console.log("Recipe Image local path ", recipeImageLocalPath);
 
             const recipeImage = await uploadOnCloudinary(recipeImageLocalPath);
             // console.log("Recipe Image URL ", recipeImage.url);

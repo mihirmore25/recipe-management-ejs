@@ -28,14 +28,14 @@ app.use(
     })
 );
 
-const isDev = process.env.NODE_ENV !== "production";
+// const isDev = process.env.NODE_ENV !== "production";
 
 app.use(
     helmet({
         contentSecurityPolicy: {
             directives: {
                 ...helmet.contentSecurityPolicy.getDefaultDirectives(),
-                "script-src": isDev ? ["'self'", "'unsafe-eval'"] : ["'self'"],
+                "script-src": ["'self'", "'unsafe-eval'"],
                 "img-src": [
                     "'self'",
                     "data:",
