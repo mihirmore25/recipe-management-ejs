@@ -27,11 +27,15 @@ app.use(
         optionsSuccessStatus: 200,
     })
 );
+
+const isDev = process.env.NODE_ENV !== "production";
+
 app.use(
     helmet({
         contentSecurityPolicy: {
             directives: {
                 ...helmet.contentSecurityPolicy.getDefaultDirectives(),
+                "script-src": isDev ? ["'self'", "'unsafe-eval'"] : ["'self'"],
                 "img-src": [
                     "'self'",
                     "data:",
