@@ -3,6 +3,7 @@ import { Recipe } from "../models/Recipe.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import fs from "fs";
+import path from "path";
 import {
     uploadOnCloudinary,
     deleteFromCloudinary,
@@ -343,30 +344,36 @@ export const updateRecipe = async (req, res) => {
         req.user._id.toString() == recipe.user.toString() ||
         req.user.role == "admin"
     ) {
-        if (req.file?.path || req.file) {
-            const recipeImageLocalPath = req.file?.path || undefined;
+        if (req.file?.path) {
+            const recipeImageLocalPath = path.resolve(req.file?.path) || undefined;
             console.log("Recipe Image local path ", recipeImageLocalPath);
 
             const recipeImage = await uploadOnCloudinary(recipeImageLocalPath);
             // console.log("Recipe Image URL ", recipeImage.url);
 
-            if (recipeImage.url) {
-                fs.unlinkSync(recipeImageLocalPath);
-                console.log(
-                    "Image removed from local server and uploaded to remote successfully.."
-                );
+            if (recipeImage?.url) {
+                if (fs.existsSync(recipeImageLocalPath)) {
+                    fs.unlinkSync(recipeImageLocalPath);
+                    console.log(
+                        "Image removed from local server and uploaded to remote successfully.."
+                    );
+                } else {
+                    console.warn(
+                        "Local file not found, skipping deletion:",
+                        recipeImageLocalPath
+                    );
+                }
+
+                await deleteFromCloudinary(recipe.recipeImage.publicId);
+                // console.log(deleteImageFromCloudinary);
+
+                // Update recipeImage only if new image is provided
+                recipe.recipeImage = {
+                    publicId:
+                        recipeImage.public_id || recipe.recipeImage.publicId,
+                    imageUrl: recipeImage.url || recipe.recipeImage.imageUrl,
+                };
             }
-
-            const deleteImageFromCloudinary = await deleteFromCloudinary(
-                recipe.recipeImage.publicId
-            );
-            // console.log(deleteImageFromCloudinary);
-
-            // Update recipeImage only if new image is provided
-            recipe.recipeImage = {
-                publicId: recipeImage.public_id || recipe.recipeImage.publicId,
-                imageUrl: recipeImage.url || recipe.recipeImage.imageUrl,
-            };
         }
 
         const updatedRecipe = await Recipe.findOneAndUpdate(
