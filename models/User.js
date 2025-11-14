@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { Recipe } from "./Recipe.js";
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema(
@@ -37,18 +36,6 @@ const userSchema = new Schema(
             enum: ["user", "admin", "guest"],
             default: "user",
         },
-        viewedRecipes: [
-            {
-                type: Schema.Types.ObjectId,
-                ref: "Recipe",
-            },
-        ],
-        likedRecipes: [
-            {
-                type: Schema.Types.ObjectId,
-                ref: "Recipe",
-            },
-        ],
         googleId: {
             type: String,
             default: null,

@@ -1,5 +1,7 @@
 import { User } from "../models/User.js";
 import { Recipe } from "../models/Recipe.js";
+import { ViewedRecipe } from "../models/ViewedRecipe.js";
+import { LikedRecipe } from "../models/LikedRecipe.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import fs from "fs";
@@ -203,51 +205,65 @@ export const getRecipes = async (req, res) => {
 };
 
 export const getRecipe = async (req, res) => {
-    let recipeId = req.params.id;
+    try {
+        const recipeId = req.params.id;
+        const userId = req.user?._id;
 
-    if (!recipeId || String(recipeId).length < 24) {
-        req.flash("error_msg", "Recipe did not found!");
-        return await res.redirect("/recipes");
-    }
+        if (!recipeId || String(recipeId).length < 24) {
+            req.flash("error_msg", "Recipe did not found!");
+            return await res.redirect("/recipes");
+        }
 
-    const recipe = await Recipe.findOne({ _id: recipeId })
-        .select("-__v")
-        .lean();
-    if (recipe === null || undefined || 0) {
-        req.flash("error_msg", "Recipe did not found!");
-        return await res.redirect("/recipes");
-    }
-    // console.log("Recipe --> ", recipe);
+        // Find Recipe
+        const recipe = await Recipe.findOne({ _id: recipeId })
+            .select("-__v")
+            .lean();
+        if (recipe === null || undefined || 0) {
+            req.flash("error_msg", "Recipe did not found!");
+            return await res.redirect("/recipes");
+        }
+        // console.log("Recipe --> ", recipe);
 
-    // const user = req.user;
-    const user = await User.findById(req.user._id);
-    // console.log("User -> ", user._id, user);
-    // Check if the user has already viewed the recipe
+        // const user = req.user;
+        const user = await User.findById(req.user._id);
+        // console.log("User -> ", user._id, user);
 
-    if (!user.viewedRecipes.includes(recipe._id)) {
-        // Increment view count if user hasn't viewed the recipe yet
-        let updateViewCount = await Recipe.updateOne(
-            { _id: recipe._id },
-            {
-                $set: {
-                    views: recipe.views + 1,
+        // Check if the user has already viewed the recipe
+        const alreadyViewed = await ViewedRecipe.findOne({
+            user: userId,
+            recipe: recipeId,
+        });
+
+        // If not viewed already
+        if (!alreadyViewed) {
+            // Always have the latest viewedAt timestamp
+            await ViewedRecipe.updateOne(
+                { user: userId, recipe: recipeId },
+                {
+                    $set: { viewedAt: new Date() },
                 },
-            }
-        );
-        // console.log("After ", updateViewCount);
+                {
+                    upsert: true, // creates a new doc if it doesn't exist
+                }
+            );
 
-        // Add the post to the user's viewedRecipes array
-        let updateViewedRecipes = await User.updateOne(
-            { _id: user._id },
-            {
-                $push: {
-                    viewedRecipes: recipe._id,
+            // Increment recipe view count
+            await Recipe.updateOne(
+                {
+                    _id: recipeId,
                 },
-            }
-        );
-        // console.log("After ", user);
+                {
+                    $inc: { views: 1 },
+                }
+            );
+        }
+
+        return await res.status(200).render("recipe", { recipe, user });
+    } catch (error) {
+        console.error("Error fetching recipe:", err);
+        req.flash("error_msg", "Something went wrong!");
+        return res.redirect("/recipes");
     }
-    return await res.status(200).render("recipe", { recipe, user });
 };
 
 export const deleteRecipe = async (req, res) => {
@@ -345,7 +361,8 @@ export const updateRecipe = async (req, res) => {
         req.user.role == "admin"
     ) {
         if (req.file?.path) {
-            const recipeImageLocalPath = path.resolve(req.file?.path) || undefined;
+            const recipeImageLocalPath =
+                path.resolve(req.file?.path) || undefined;
             console.log("Recipe Image local path ", recipeImageLocalPath);
 
             const recipeImage = await uploadOnCloudinary(recipeImageLocalPath);
@@ -427,62 +444,67 @@ export const getUserRecipes = async (req, res) => {
 };
 
 export const likeRecipe = async (req, res) => {
-    const recipeId = req.params.id;
+    try {
+        const recipeId = req.params.id;
+        const userId = req.user?._id;
 
-    if (!recipeId || String(recipeId).length < 24) {
-        req.flash("error_msg", "Recipe did not found!");
-        return await res.redirect("/recipes");
-    }
+        // Validate Recipe Id format
+        if (!recipeId || String(recipeId).length < 24) {
+            req.flash("error_msg", "Recipe did not found!");
+            return await res.redirect("/recipes");
+        }
 
-    const recipe = await Recipe.findOne({ _id: recipeId })
-        .select("-__v")
-        .lean();
+        // Find Recipe
+        const recipe = await Recipe.findOne({ _id: recipeId })
+            .select("-__v")
+            .lean();
 
-    if (recipe === null || undefined || 0) {
-        req.flash("error_msg", "Recipe did not found!");
-        return await res.redirect("/recipes");
-    }
+        // If recipe not found show error
+        if (recipe === null || undefined || 0) {
+            req.flash("error_msg", "Recipe did not found!");
+            return await res.redirect("/recipes");
+        }
 
-    // const recipe = await Recipe.findByIdAndUpdate(
-    //     recipeId,
-    //     {
-    //         $inc: { likes: 1 },
-    //     },
-    //     {
-    //         new: true,
-    //     }
-    // );
+        // Check if user has already liked this recipe
+        const alreadyLiked = await LikedRecipe.findOne({
+            user: userId,
+            recipe: recipeId,
+        });
 
-    const user = await User.findById(req.user._id);
-
-    if (!user.likedRecipes.includes(recipe._id)) {
-        // Increment likes count if user hasn't liked the recipe yet
-        let updateLikeCount = await Recipe.updateOne(
-            { _id: recipe._id },
-            {
-                // $set: {
-                //     likes: recipe.likes + 1,
-                // },
-                $inc: {
-                    likes: 1,
+        // If not already liked by user
+        if (!alreadyLiked) {
+            // Always have the latest likedAt timestamp
+            await LikedRecipe.updateOne(
+                {
+                    user: userId,
+                    recipe: recipeId,
                 },
-            }
-        );
-        // console.log("After ", updateLikeCount);
-
-        // Add the like to the user's likedRecipes array
-        let updateLikedRecipes = await User.updateOne(
-            { _id: user._id },
-            {
-                $push: {
-                    likedRecipes: recipe._id,
+                {
+                    $set: {
+                        likedAt: new Date(),
+                    },
                 },
-            }
-        );
-        // console.log("After ", user);
-    }
+                { upsert: true } // creates a new doc if it doesn't exist
+            );
 
-    return await res.status(200).redirect(`/recipes/${recipeId}`);
+            // Increment like count
+            await Recipe.updateOne(
+                {
+                    _id: recipeId,
+                },
+                {
+                    $inc: { likes: 1 },
+                }
+            );
+        }
+
+        // If liked by user then do this
+        return await res.status(200).redirect(`/recipes/${recipeId}`);
+    } catch (error) {
+        console.error("Error liking recipe: ", error);
+        req.flash("error_msg", "Something went wrong!");
+        return res.redirect("/recipes");
+    }
 };
 
 export { client };
