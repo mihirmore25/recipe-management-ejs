@@ -17,7 +17,11 @@ let client;
 if (process.env.NODE_ENV === "production") {
     client = new Redis(process.env.UPSTASH_REDIS_URL);
 } else {
-    client = new Redis();
+    client = new Redis({
+        host: "localhost",
+        port: 6379,
+        password: process.env.REDIS_LOCAL_URL,
+    });
 }
 
 client.on("connect", () => {

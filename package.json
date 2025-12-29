@@ -8,7 +8,9 @@
         "start": "NODE_ENV=production dotenvx run -f .env.production -- nodemon server.js",
         "dev": "dotenvx run -f .env.development -- nodemon server.js",
         "dev:env:encrypt": "dotenvx encrypt -f .env.development",
-        "dev:env:decrypt": "dotenvx decrypt -f .env.development"
+        "dev:env:decrypt": "dotenvx decrypt -f .env.development",
+        "prod:env:encrypt": "dotenvx encrypt -f .env.production",
+        "prod:env:decrypt": "dotenvx decrypt -f .env.production"
     },
     "keywords": [],
     "author": "",
@@ -24,6 +26,7 @@
         "express": "^4.21.2",
         "express-session": "^1.18.1",
         "helmet": "^8.0.0",
+        "inngest": "^3.47.0",
         "ioredis": "^5.4.2",
         "jsonwebtoken": "^9.0.2",
         "mongoose": "^8.9.5",

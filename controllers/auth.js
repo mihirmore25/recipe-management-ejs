@@ -3,6 +3,7 @@ import bcrypt from "bcryptjs";
 import crypto from "crypto";
 import jwt from "jsonwebtoken";
 import passport from "../config/passport.js";
+import { inngest } from "../lib/inngest.js";
 import { sendResetPasswordEmail } from "../utils/nodemailer.js";
 
 const generateToken = (user) => {
@@ -207,14 +208,38 @@ export const forgotPassword = async (req, res) => {
         await user.save();
         // console.log("After", user);
 
-        sendResetPasswordEmail(user.email, token).then(async (response) => {
-            // console.log(response.response);
-            console.log(response.data);
+        // sendResetPasswordEmail(user.email, token).then(async (response) => {
+        //     // console.log(response.response);
+        //     console.log(response.data);
 
-            req.flash("success_msg", "Forgot Password Mail Sent Successfully!");
-            return await res.status(200).render("forgotPassword");
+        //     req.flash("success_msg", "Forgot Password Mail Sent Successfully!");
+        //     return await res.status(200).render("forgotPassword");
+        // });
+
+        // Send email via Inngest instead of waiting
+        const eventResponse = await inngest.send({
+            name: "user/password.reset.requested",
+            data: {
+                email: user.email,
+                token,
+                userId: user._id.toString(),
+            },
         });
+
+        console.log(
+            `✅ Password reset event sent successfully:`,
+            eventResponse
+        );
+
+        // Immediate response to user
+        req.flash(
+            "success_msg",
+            "Password reset link will be sent to your email shortly!"
+        );
+        return await res.status(200).render("forgotPassword");
     } catch (error) {
+        console.error("Forgot password error:", error);
+        req.flash("error_msg", "Something went wrong. Please try again.");
         return await res.status(500).redirect("/login");
     }
 };

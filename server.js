@@ -4,6 +4,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import session from "express-session";
 import flash from "connect-flash";
+import inngestRoutes from "./routes/inngest.js";
 import authRoutes from "./routes/auth.js";
 import userRoutes from "./routes/users.js";
 import recipeRoutes from "./routes/recipes.js";
@@ -11,7 +12,7 @@ import morgan from "morgan";
 import { dbClient } from "./db/db.js";
 import { User } from "./models/User.js";
 // import cron from "node-cron";
-import { removeGuestUserEveryThrityMinutes } from "./middleware/removeGuestUser.js";
+// import { removeGuestUserEveryThrityMinutes } from "./middleware/removeGuestUser.js";
 import passport from "./config/passport.js";
 import { RedisStore } from "connect-redis";
 import { client } from "./controllers/recipe.js";
@@ -23,7 +24,10 @@ dbClient();
 // Middleware
 app.use(
     cors({
-        origin: "http://localhost:3000",
+        origin:
+            process.env.NODE_ENV === "production"
+                ? process.env.PRODUCTION_CLIENT_URL
+                : "http://localhost:3000",
         optionsSuccessStatus: 200,
     })
 );
@@ -96,13 +100,14 @@ app.set("view engine", "ejs");
 // });
 
 // Routes
+app.use("/", inngestRoutes);
 app.use("/", authRoutes);
 app.use("/", userRoutes);
 app.use("/", recipeRoutes);
 
 const PORT = process.env.APP_PORT || 4000;
 
-app.use(removeGuestUserEveryThrityMinutes);
+// app.use(removeGuestUserEveryThrityMinutes);
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}...`);
