@@ -52,6 +52,7 @@ app.use(
 );
 app.use(helmet.xssFilter());
 app.use(helmet.xXssProtection());
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());

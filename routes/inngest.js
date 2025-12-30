@@ -13,7 +13,10 @@ router.use(
     serve({
         client: inngest,
         functions: functions,
-        signingKey: process.env.INNGEST_SIGNING_KEY,
+        signingKey:
+            process.env.NODE_ENV === "production"
+                ? process.env.INNGEST_SIGNING_KEY
+                : undefined,
         onError: (error) => {
             console.error("Inngest Error:", error);
         },
