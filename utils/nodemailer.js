@@ -16,7 +16,7 @@ export const sendResetPasswordEmail = async (email, token) => {
     };
 
     const response = await resend.emails.send(mailOptions);
-    console.log("Email sent:", response);
+    // console.log("Email sent:", response);
 
     return response;
 };

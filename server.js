@@ -1,4 +1,6 @@
+import http from "http";
 import express from "express";
+import mongoose from "mongoose";
 import helmet from "helmet";
 import cors from "cors";
 import cookieParser from "cookie-parser";
@@ -17,6 +19,7 @@ import passport from "./config/passport.js";
 import { RedisStore } from "connect-redis";
 import { client } from "./controllers/recipe.js";
 const app = express();
+const server = http.createServer(app);
 
 // DB connection
 dbClient();
@@ -110,6 +113,40 @@ const PORT = process.env.APP_PORT || 4000;
 
 // app.use(removeGuestUserEveryThrityMinutes);
 
-app.listen(PORT, () => {
+// app.listen(PORT, () => {
+//     console.log(`Server is running on port ${PORT}...`);
+// });
+
+server.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}...`);
 });
+
+// Graceful Shutdown Logic
+const shutdown = async (signal) => {
+    console.log(`Received ${signal}. Closing server...`);
+
+    // Stop accepting new requests
+    server.close(() => {
+        console.log("HTTP server closed.");
+    });
+
+    try {
+        // Close MongoDB connection
+        await mongoose.disconnect();
+        console.log("MongoDB connection closed.");
+
+        // Close Redis connection
+        await client.quit();
+        console.log("Redis connection closed.");
+
+        console.log("Graceful shutdown completed.");
+        process.exit(0);
+    } catch (err) {
+        console.error("Error during shutdown:", err);
+        process.exit(1);
+    }
+};
+
+// Handle termination signals
+process.on("SIGTERM", () => shutdown("SIGTERM"));
+process.on("SIGINT", () => shutdown("SIGINT"));

@@ -226,10 +226,10 @@ export const forgotPassword = async (req, res) => {
             },
         });
 
-        console.log(
-            `✅ Password reset event sent successfully:`,
-            eventResponse
-        );
+        // console.log(
+        //     `✅ Password reset event sent successfully:`,
+        //     eventResponse
+        // );
 
         // Immediate response to user
         req.flash(

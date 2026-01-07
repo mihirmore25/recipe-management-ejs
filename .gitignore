@@ -81,6 +81,9 @@ web_modules/
 .env.keys
 # .env.development
 
+# Docker Walkthrough Markdown File
+DOCKER_WALKTHROUGH.md
+
 # parcel-bundler cache (https://parceljs.org/)
 .cache
 .parcel-cache
